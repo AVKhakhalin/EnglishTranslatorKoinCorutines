@@ -1,9 +1,8 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources
 
 import android.content.Context
-import javax.inject.Inject
 
-class ResourcesProviderImpl @Inject constructor(
+class ResourcesProviderImpl(
     private val context: Context
 ): ResourcesProvider {
     override fun getString(id: Int): String {

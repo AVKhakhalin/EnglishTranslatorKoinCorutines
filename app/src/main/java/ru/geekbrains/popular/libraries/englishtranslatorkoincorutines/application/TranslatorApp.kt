@@ -1,26 +1,25 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application
 
 import android.app.Application
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di.AppComponent
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di.DaggerAppComponent
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di.application
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di.mainScreen
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
 
-class TranslatorApp : Application() {
+class TranslatorApp: Application() {
+    /** Задание переменных */ //region
     companion object {
         lateinit var instance: TranslatorApp
     }
-    lateinit var component: AppComponent
+    val themeColorsImpl: ThemeColorsImpl by inject()
+    // endregion
 
     override fun onCreate() {
         super.onCreate()
-        // Dagger
+        // Инициализация класса TranslatorApp
         instance = this
-        component = DaggerAppComponent.builder()
-            .setContext(this)
-            .build()
 
         // Koin
         startKoin {

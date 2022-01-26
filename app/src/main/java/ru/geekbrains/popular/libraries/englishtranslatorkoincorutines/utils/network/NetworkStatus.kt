@@ -7,10 +7,8 @@ import android.net.NetworkRequest
 import androidx.core.content.getSystemService
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import javax.inject.Inject
 
-//class NetworkStatus @Inject constructor(
-class NetworkStatus @Inject constructor(
+class NetworkStatus(
     context: Context
 ) {
 

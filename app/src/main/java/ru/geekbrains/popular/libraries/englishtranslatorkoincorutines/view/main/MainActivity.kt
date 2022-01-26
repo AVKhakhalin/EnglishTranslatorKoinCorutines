@@ -26,7 +26,6 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.base.BaseActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.MainAdapter
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
-import javax.inject.Inject
 
 
 class MainActivity: BaseActivity<AppState, MainInteractor>() {
@@ -36,7 +35,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // MainAdapter
     private var adapter: MainAdapter? = null
     // Bottom navigation menu (признако основного состояния Main State - когда можно вводить слова)
-    private var isMain: Boolean = true
+    private var isMain: Boolean = false
     // Установка темы приложения
     private var isThemeDay: Boolean = true
     // Событие: клик по элементу списка с найденными словами
@@ -49,26 +48,24 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // ViewModel
     override lateinit var model: MainViewModel
     // ThemeColors
-    @Inject
-    lateinit var themeColorsImpl: ThemeColorsImpl
+    private var themeColorsImpl: ThemeColorsImpl = TranslatorApp.instance.themeColorsImpl
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Запуск Dagger
-        TranslatorApp.instance.component.inject(this)
         // Считывание системных настроек, применение темы к приложению
         readSettingsAndSetupApplication(savedInstanceState)
         // Установка binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Инициализация ViewModel
+        initViewModel()
+        // Установка View
+        initViews()
+    }
 
-        // Начальная установка ViewModel
-        val viewModel: MainViewModel by viewModel()
-        model = viewModel
-        // Подписка на ViewModel
-        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
-
+    // Установка Views
+    private fun initViews() {
         // Начальная установка доступности поискового поля
         switchBottomAppBar()
         // Установка события нажатия на нижниюю FAB для открытия и закрытия поискового элемента
@@ -77,6 +74,15 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         }
         // Получение текущих цветов поля
         themeColorsImpl.initiateColors(theme)
+    }
+
+    // Инициализация ViewModel
+    private fun initViewModel() {
+        // Начальная установка ViewModel
+        val viewModel: MainViewModel by viewModel()
+        model = viewModel
+        // Подписка на ViewModel
+        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
     }
 
     override fun renderData(appState: AppState) {
@@ -238,7 +244,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         val sharedPreferences: SharedPreferences =
             getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
         isMain = sharedPreferences.getBoolean(
-            Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, true
+            Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, false
         )
         if (savedInstanceState != null) {
             isThemeDay = sharedPreferences.getBoolean(
@@ -282,7 +288,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
         val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
         sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_THEME_KEY, isThemeDay)
-        sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, isMain)
+        sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, !isMain)
         sharedPreferencesEditor.apply()
     }
 }

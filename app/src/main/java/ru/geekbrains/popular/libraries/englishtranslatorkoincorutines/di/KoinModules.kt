@@ -10,8 +10,10 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.Repository
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.RepositoryImplementation
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.network.NetworkStatus
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainViewModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
 
 val application = module {
     single<Repository<List<DataModel>>>(named(Constants.NAME_REMOTE)) {
@@ -22,6 +24,12 @@ val application = module {
     }
     single<NetworkStatus> {
         NetworkStatus(androidContext())
+    }
+    single<ResourcesProviderImpl> {
+        ResourcesProviderImpl(androidContext())
+    }
+    single<ThemeColorsImpl> {
+        ThemeColorsImpl()
     }
 }
 

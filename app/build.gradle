@@ -92,13 +92,13 @@ dependencies {
     implementation libs.room.rxJava3 */
     // Coroutines
     implementation libs.coroutines.android
-    // Dagger
+/*    // Dagger
     implementation libs.dagger.daggger
     implementation libs.dagger.runtime
     implementation libs.dagger.support
     kapt libs.dagger.processor
     kapt libs.dagger.compiler
-    kapt libs.dagger.addsupport
+    kapt libs.dagger.addsupport */
     // Koin
         //Koin core features
     implementation libs.koin.core

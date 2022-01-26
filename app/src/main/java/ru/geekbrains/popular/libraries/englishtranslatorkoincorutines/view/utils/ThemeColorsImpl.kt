@@ -3,9 +3,8 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.util
 import android.content.res.Resources
 import android.util.TypedValue
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import javax.inject.Inject
 
-class ThemeColorsImpl @Inject constructor(): ThemeColors {
+class ThemeColorsImpl: ThemeColors {
     //region ЗАДАНИЕ ПЕРЕМЕННЫХ
     private val colorSecondaryTypedValue: TypedValue = TypedValue()
     private val colorTypedValue: TypedValue = TypedValue()

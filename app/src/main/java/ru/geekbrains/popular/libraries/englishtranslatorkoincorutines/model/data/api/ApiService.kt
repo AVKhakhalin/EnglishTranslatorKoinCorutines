@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource
+package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.api
 
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
