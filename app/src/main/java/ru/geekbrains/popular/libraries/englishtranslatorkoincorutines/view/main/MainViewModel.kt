@@ -1,50 +1,40 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 
 import androidx.lifecycle.LiveData
-import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.parseSearchResults
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel
-import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
+class MainViewModel (
     private val interactor: MainInteractor
 ): BaseViewModel<AppState>() {
-    private var appState: AppState? = null
+
+    private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
 
     fun subscribe(): LiveData<AppState> {
         return liveDataForViewToObserve
     }
 
-    //    override fun getData(word: String, isOnline: Boolean) {
     override fun getData(word: String) {
-        compositeDisposable.add(
-            interactor.getData(word)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .doOnSubscribe(doOnSubscribe())
-                .subscribeWith(getObserver())
-        )
+        _mutableLiveData.value = AppState.Loading(null)
+        cancelJob()
+        viewModelCoroutineScope.launch { startInteractor(word) }
     }
 
-    private fun doOnSubscribe(): (Disposable) -> Unit =
-        { liveDataForViewToObserve.value = AppState.Loading(null) }
+    //Doesn't have to use withContext for Retrofit call if you use .addCallAdapterFactory(CoroutineCallAdapterFactory()). The same goes for Room
+    private suspend fun startInteractor(word: String) = withContext(Dispatchers.IO) {
+        _mutableLiveData.postValue(parseSearchResults(interactor.getData(word)))
+    }
 
-    private fun getObserver(): DisposableObserver<AppState> {
-        return object: DisposableObserver<AppState>() {
+    override fun handleError(error: Throwable) {
+        _mutableLiveData.postValue(AppState.Error(error))
+    }
 
-            override fun onNext(state: AppState) {
-                appState = parseSearchResults(state)
-                liveDataForViewToObserve.value = appState
-            }
-
-            override fun onError(e: Throwable) {
-                liveDataForViewToObserve.value = AppState.Error(e)
-            }
-
-            override fun onComplete() {
-            }
-        }
+    override fun onCleared() {
+        _mutableLiveData.value = AppState.Success(null, true)
+        super.onCleared()
     }
 }

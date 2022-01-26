@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.TranslatorApp
@@ -47,9 +47,6 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             }
         }
     // ViewModel
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject
     override lateinit var model: MainViewModel
     // ThemeColors
     @Inject
@@ -65,18 +62,21 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         // Установка binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Начальная установка ViewModel
+        val viewModel: MainViewModel by viewModel()
+        model = viewModel
+        // Подписка на ViewModel
+        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+
+        // Начальная установка доступности поискового поля
+        switchBottomAppBar()
         // Установка события нажатия на нижниюю FAB для открытия и закрытия поискового элемента
         binding.bottomNavigationMenu.bottomAppBarFab.setOnClickListener {
             switchBottomAppBar()
         }
         // Получение текущих цветов поля
         themeColorsImpl.initiateColors(theme)
-        // Начальная установка доступности поискового поля
-        switchBottomAppBar()
-        // Начальная установка ViewModel
-        model = viewModelFactory.create(MainViewModel::class.java)
-        // Подписка на ViewModel
-        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
     }
 
     override fun renderData(appState: AppState) {

@@ -9,6 +9,5 @@ abstract class BaseActivity<T: AppState, I: Interactor<T>>: AppCompatActivity() 
 
     abstract val model: BaseViewModel<T>
 
-    //    abstract fun renderData(appState: T)
     abstract fun renderData(dataModel: T)
 }

@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
+//class NetworkStatus @Inject constructor(
 class NetworkStatus @Inject constructor(
     context: Context
 ) {
@@ -28,7 +29,7 @@ class NetworkStatus @Inject constructor(
 
         connectivityManager?.registerNetworkCallback(
             request,
-            object : ConnectivityManager.NetworkCallback() {
+            object: ConnectivityManager.NetworkCallback() {
                 /** Сеть есть уже сейчас */
                 override fun onAvailable(network: Network) {
                     networkSubject.onNext(true)
