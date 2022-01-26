@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@color/color_background_splash" />
+    <item
+        android:drawable="@drawable/alphabet"
+        android:gravity="center"
+        /> <!-- Так корректно отображается фон в activity_main.xml -->
+</layer-list>
