@@ -13,7 +13,6 @@ class TranslatorApp: Application() {
     companion object {
         lateinit var instance: TranslatorApp
     }
-    val themeColorsImpl: ThemeColorsImpl by inject()
     // endregion
 
     override fun onCreate() {

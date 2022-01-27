@@ -108,4 +108,7 @@ dependencies {
     implementation libs.koin.compat
         // For Retrofit 2 coroutines
     implementation libs.koin.retrofitcoroutines
+        // Koin for Tests
+    testImplementation libs.koin.testsandroidx
+    testImplementation libs.koin.testsio
 }

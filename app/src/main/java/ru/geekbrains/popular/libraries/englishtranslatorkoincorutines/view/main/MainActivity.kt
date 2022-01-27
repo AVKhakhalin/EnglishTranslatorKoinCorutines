@@ -16,7 +16,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.view.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.GlobalContext.get
+import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.TranslatorApp
@@ -48,7 +51,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // ViewModel
     override lateinit var model: MainViewModel
     // ThemeColors
-    private var themeColorsImpl: ThemeColorsImpl = TranslatorApp.instance.themeColorsImpl
+    private var themeColorsImpl: ThemeColorsImpl = getKoin().get()
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,14 +69,14 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
 
     // Установка Views
     private fun initViews() {
+        // Получение текущих цветов поля
+        themeColorsImpl.initiateColors(theme)
         // Начальная установка доступности поискового поля
         switchBottomAppBar()
         // Установка события нажатия на нижниюю FAB для открытия и закрытия поискового элемента
         binding.bottomNavigationMenu.bottomAppBarFab.setOnClickListener {
             switchBottomAppBar()
         }
-        // Получение текущих цветов поля
-        themeColorsImpl.initiateColors(theme)
     }
 
     // Инициализация ViewModel
