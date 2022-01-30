@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="color_error">#bf1e19</color>
+    <color name="color_text_main">#66000014</color>
+    <color name="color_delete_text_icon">#66000014</color>
+    <color name="color_text_header">#313131</color>
+    <color name="color_black">#313131</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_gray">#66000000</color>
+    <color name="color_background_splash">#FFFFD894</color>
+
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Цвета темы DAY -->
+    <!-- Цвета для нижней плавающей кнопки -->
+    <color name="color_primary_day">#008577</color>
+    <color name="color_primary_dark_day">#00574B</color>
+    <color name="color_accent_day">#D81B60</color>
+    <color name="color_gray_day">#66000000</color>
+    <color name="white_day">#FFFFFFFF</color>
+    <!-- Основные цвета окна -->
+    <color name="activity_background_day">#FFFFD894</color>
+    <color name="bottom_sheet_line_color_day">#663b4351</color>
+    <color name="bottom_sheet_description_title_text_color_day">#000</color>
+    <color name="bottom_sheet_background_color_day">#B4F6FD</color>
+    <color name="bottom_sheet_background_color_night_description_text_day">#262727</color>
+
+    <!-- Цвета темы NIGHT -->
+    <!-- Цвета для нижней плавающей кнопки -->
+    <color name="color_primary_night">#00665B</color>
+    <color name="color_primary_dark_night">#003730</color>
+    <color name="color_accent_night">#9E1346</color>
+    <color name="color_gray_night">#66000000</color>
+    <color name="white_night">#BDBDBD</color>
+    <!-- Основные цвета окна -->
+    <color name="activity_background_night">#003730</color>
+    <color name="bottom_sheet_line_color_night">#6614171C</color>
+    <color name="bottom_sheet_description_title_text_color_night">#ACACAC</color>
+    <color name="bottom_sheet_background_color_night">#4E6062</color>
+    <color name="bottom_sheet_background_color_night_description_text_night">#CAB0AA</color>
+
 </resources>
