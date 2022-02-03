@@ -1,9 +1,11 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.parseSearchResults
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel
@@ -11,8 +13,12 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.
 class MainViewModel (
     private val interactor: MainInteractor
 ): BaseViewModel<AppState>() {
-
+    /** Задание переменных */ //region
+    // Информация с переводом слова
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
+    // Сохранение состояния приложения
+    private val liveDataSaveSettings: MutableLiveData<Settings> = MutableLiveData()
+    //endregion
 
     fun subscribe(): LiveData<AppState> {
         return liveDataForViewToObserve
@@ -37,4 +43,14 @@ class MainViewModel (
         _mutableLiveData.value = AppState.Success(null, true)
         super.onCleared()
     }
+
+    /** Сохранение и восстановление текущих настроек приложения */ //region
+    fun saveSettings(settings: Settings) {
+        liveDataSaveSettings.value = settings
+    }
+    fun loadSettings(): Settings? {
+        return liveDataSaveSettings.value
+    }
+    //endregion
+
 }

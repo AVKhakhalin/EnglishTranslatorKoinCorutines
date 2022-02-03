@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.EditText
@@ -16,13 +15,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.view.*
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.context.GlobalContext.get
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.TranslatorApp
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.ActivityMainBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
@@ -56,13 +53,26 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Считывание системных настроек, применение темы к приложению
-        readSettingsAndSetupApplication(savedInstanceState)
+        // Считывание системных настроек при певом запуске приложения, применение темы к приложению
+        if (savedInstanceState == null) readSettingsAndSetupApplication(savedInstanceState)
+        // Инициализация ViewModel
+        initViewModel()
+        // Считывание системных настроек из viewModel,
+        // применение темы к приложению при повторном запуске приложения
+        if (savedInstanceState == null) {
+            model.saveSettings(Settings(isThemeDay, !isMain))
+        } else {
+            val settings: Settings? = model.loadSettings()
+            settings?.let {
+                isMain = settings.getIsMain()
+                isThemeDay = settings.getIsThemeDay()
+            }
+            // Смена темы приложения на ранее установленную пользователем
+            changeTheme()
+        }
         // Установка binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Инициализация ViewModel
-        initViewModel()
         // Установка View
         initViews()
     }
@@ -217,6 +227,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             ).start()
             // Изменение нижней кнопки FAB
             isMain = true
+
             binding.bottomNavigationMenu.bottomAppBar.navigationIcon =
                 ContextCompat.getDrawable(this, R.drawable.ic_hamburger_menu_bottom_bar)
             binding.bottomNavigationMenu.bottomAppBar.fabAlignmentMode =
@@ -231,7 +242,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.bottomNavigationMenu.bottomAppBar.menu
                 .getItem(Constants.BUTTON_CHANGE_THEME_INDEX).setOnMenuItemClickListener {
                     isMain = false
-                    changeTheme()
+                    setTheme()
                     true
                 }
             // Анимированное появление кнопки меню со сменой темы
@@ -253,11 +264,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             isThemeDay = sharedPreferences.getBoolean(
                 Constants.SHARED_PREFERENCES_THEME_KEY, true
             )
-            if (isThemeDay) {
-                setTheme(R.style.DayTheme)
-            } else {
-                setTheme(R.style.NightTheme)
-            }
+            changeTheme()
         } else {
             // Применение тёмной темы при первом запуске приложения
             // на мобильных устройствах с версией Android 10+
@@ -269,15 +276,10 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     }
 
     // Установка темы приложения
-    private fun changeTheme() {
+    private fun setTheme() {
         isThemeDay = !isThemeDay
-        saveApplicationSettings()
+        model.saveSettings(Settings(isThemeDay, isMain))
         recreate()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        saveApplicationSettings()
     }
 
     override fun onPause() {
@@ -293,5 +295,14 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_THEME_KEY, isThemeDay)
         sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, !isMain)
         sharedPreferencesEditor.apply()
+    }
+
+    // Изменение темы приложения
+    private fun changeTheme() {
+        if (isThemeDay) {
+            setTheme(R.style.DayTheme)
+        } else {
+            setTheme(R.style.NightTheme)
+        }
     }
 }

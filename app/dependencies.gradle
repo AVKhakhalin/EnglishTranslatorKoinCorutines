@@ -83,7 +83,7 @@ ext {
     koin.android = "io.insert-koin:koin-android:$koinVersion"
         //Koin Java Compatibility
     koin.compat = "io.insert-koin:koin-android-compat:$koinVersion"
-        // Koin for Retrofit 2 coroutines
+        // Koin for Retrofit 2 coroutines (needs for CoroutineCallAdapterFactory())
     koin.retrofitcoroutines = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$koinRetrofitcoroutinesVersion"
         // Koin for Tests
     koin.testsandroidx = "androidx.test:core:$koinTestsandroidxVersion"
