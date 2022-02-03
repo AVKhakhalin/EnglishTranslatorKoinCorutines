@@ -24,14 +24,14 @@ class MainInteractor (
 
 
     override suspend fun getData(word: String): AppState {
-        return AppState.Success(
-            if (networkStatus.isOnline()) {
-                remoteRepository
-            } else {
-                localRepository
-            }.getData(word),
-            isEnglish(word)
-        )
+        val appState: AppState
+        if (networkStatus.isOnline()) {
+            appState = AppState.Success(remoteRepository.getData(word), isEnglish(word))
+            localRepository.saveToDB(appState)
+        } else {
+            appState = AppState.Success(localRepository.getData(word), isEnglish(word))
+        }
+        return appState
     }
 
     // Определение языка (английский - true, русский - false) вводимого слова
