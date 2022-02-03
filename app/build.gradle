@@ -85,11 +85,12 @@ dependencies {
     implementation libs.retrofit.rxJava2
 //    implementation libs.retrofit.rxJava3 // одновременно с rxJava2 не включать
     implementation libs.retrofit.interceptor
-/*    // Room
+    // Room
     implementation libs.room.runtime
     kapt libs.room.compiler
     kapt libs.room.m1Support
-    implementation libs.room.rxJava3 */
+    implementation libs.room.rxJava3
+    implementation libs.room.ktx
     // Coroutines
     implementation libs.coroutines.android
 /*    // Dagger

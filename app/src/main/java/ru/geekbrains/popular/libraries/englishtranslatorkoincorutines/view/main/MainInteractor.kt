@@ -4,6 +4,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.applicatio
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.Repository
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.RepositoryLocal
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.network.NetworkStatus
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.Interactor
 import java.util.regex.Matcher
@@ -11,7 +12,7 @@ import java.util.regex.Pattern
 
 class MainInteractor (
     val remoteRepository: Repository<List<DataModel>>,
-    val localRepository: Repository<List<DataModel>>,
+    val localRepository: RepositoryLocal<List<DataModel>>,
     val networkStatus: NetworkStatus
 ): Interactor<AppState> {
 

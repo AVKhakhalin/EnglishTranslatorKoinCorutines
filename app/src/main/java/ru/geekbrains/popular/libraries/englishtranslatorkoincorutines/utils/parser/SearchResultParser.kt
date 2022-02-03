@@ -3,6 +3,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.Meanings
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room.HistoryEntity
 
 fun parseSearchResults(state: AppState): AppState {
     val newSearchResults = arrayListOf<DataModel>()
@@ -46,4 +47,28 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
         }
     }
     return meaningsSeparatedByComma
+}
+
+fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModel> {
+    val searchResult = ArrayList<DataModel>()
+    if (!list.isNullOrEmpty()) {
+        for (entity in list) {
+            searchResult.add(DataModel(entity.word, null))
+        }
+    }
+    return searchResult
+}
+
+fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
+    return when (appState) {
+        is AppState.Success -> {
+            val searchResult = appState.data
+            if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
+                null
+            } else {
+                HistoryEntity(searchResult[0].text!!, null)
+            }
+        }
+        else -> null
+    }
 }
