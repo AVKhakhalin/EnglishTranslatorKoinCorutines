@@ -2,6 +2,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils
 
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.Meanings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room.HistoryEntity
 
@@ -71,4 +72,22 @@ fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
         }
         else -> null
     }
+}
+
+fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWord> {
+    var dataWord: MutableList<DataWord> = mutableListOf()
+    dataModel?.let {
+        it.forEach { it ->
+            dataWord.add(
+                DataWord(
+                it.text.toString(),
+                it.meanings?.get(0)?.translation?.translation.toString(),
+                "",
+                "",
+                "",
+                "")
+            )
+        }
+    }
+    return dataWord
 }

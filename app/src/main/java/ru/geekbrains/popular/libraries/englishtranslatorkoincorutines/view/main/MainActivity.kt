@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -22,9 +23,12 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.applicatio
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.ActivityMainBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelToDataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.base.BaseActivity
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.MainAdapter
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.ItemTouchHelperCallback
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.MainAdapterTouch
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
 
 
@@ -33,18 +37,19 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // Binding
     private lateinit var binding: ActivityMainBinding
     // MainAdapter
-    private var adapter: MainAdapter? = null
+//    private var adapter: MainAdapter? = null
+    private var adapter: MainAdapterTouch? = null
     // Bottom navigation menu (признако основного состояния Main State - когда можно вводить слова)
     private var isMain: Boolean = false
     // Установка темы приложения
     private var isThemeDay: Boolean = true
     // Событие: клик по элементу списка с найденными словами
-    private val onListItemClickListener: MainAdapter.OnListItemClickListener =
-        object: MainAdapter.OnListItemClickListener {
-            override fun onItemClick(data: DataModel) {
-                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
-            }
-        }
+//    private val onListItemClickListener: MainAdapterTouch.OnListItemClickListener =
+//        object: MainAdapter.OnListItemClickListener {
+//            override fun onItemClick(data: DataModel) {
+//                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
+//            }
+//        }
     // ViewModel
     override lateinit var model: MainViewModel
     // ThemeColors
@@ -104,6 +109,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 showViewWorking()
                 val dataModel = appState.data
                 val isEnglish: Boolean = appState.isEnglish
+                val dataWord: MutableList<DataWord> = convertDataModelToDataWord(dataModel)
                 if (dataModel == null || dataModel.isEmpty()) {
                     Toast.makeText(
                         this, getString(R.string.empty_server_response_on_success),
@@ -113,11 +119,20 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                     if (adapter == null) {
                         binding.mainActivityRecyclerview.layoutManager =
                             LinearLayoutManager(applicationContext)
-                        binding.mainActivityRecyclerview.adapter =
-                            MainAdapter(onListItemClickListener, dataModel, isEnglish)
+                        val adapter = MainAdapterTouch(
+                                object: OnListItemClickListener {
+                                    override fun onItemClick(data: DataWord) {
+                                        Toast.makeText(this@MainActivity, data.word, Toast.LENGTH_SHORT).show()
+                                    }
+                                }, dataWord, isEnglish
+                            )
+                        binding.mainActivityRecyclerview.adapter = adapter
+                        ItemTouchHelper(ItemTouchHelperCallback(adapter))
+                            .attachToRecyclerView(binding.mainActivityRecyclerview)
+                        this.adapter = adapter
                     } else {
                         adapter?.let {
-                            it.setData(dataModel, isEnglish)
+                            it.setData(dataWord, isEnglish)
                         }
                     }
                 }
