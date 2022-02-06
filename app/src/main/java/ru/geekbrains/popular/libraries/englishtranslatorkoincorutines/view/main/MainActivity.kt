@@ -1,9 +1,13 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.EditText
@@ -253,13 +257,20 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             // Появление меню с настройками приложения
             binding.bottomNavigationMenu.bottomAppBar
                 .replaceMenu(R.menu.bottom_menu_navigation)
-            // Установка события смены кнопки
+            // Установка события отображения сохранённых в базу данных слов (открытие нового окна)
+            binding.bottomNavigationMenu.bottomAppBar.menu
+                .getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX).setOnMenuItemClickListener {
+                    binding.successLinearLayout.visibility = View.INVISIBLE
+                    true
+                }
+            // Установка события смены темы приложения
             binding.bottomNavigationMenu.bottomAppBar.menu
                 .getItem(Constants.BUTTON_CHANGE_THEME_INDEX).setOnMenuItemClickListener {
                     isMain = false
                     setTheme()
                     true
                 }
+
             // Анимированное появление кнопки меню со сменой темы
             // TODO
 //            ObjectAnimator.ofFloat(binding.bottomNavigationMenu.bottomAppBar.menu

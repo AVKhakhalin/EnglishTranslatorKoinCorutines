@@ -12,5 +12,8 @@
     <string name="header_textview_recycler_item_tools_text">Заголовок</string>
     <string name="description_textview_recycler_item_tools_text">Образец текста</string>
     <string name="search_default_help">Введите слово</string>
-    <string name="action_bottom_change_theme">Сменить тему</string>
+    <string name="action_bottom_change_theme_title">Сменить тему</string>
+    <string name="action_show_db_title">Посмотреть сохранённое</string>
+    <string name="database_buttons_relative_layout_hints">Удалить слово</string>
+    <string name="main_save_to_db_hints">Сохранить</string>
 </resources>

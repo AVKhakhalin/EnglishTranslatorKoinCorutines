@@ -1,7 +1,10 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter
 
+import android.animation.ObjectAnimator
+import android.opengl.Visibility
 import android.view.View
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.java.KoinJavaComponent
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
@@ -20,17 +23,28 @@ class WordViewHolder(
     override fun bind(dataWord: DataWord, isEnglish: Boolean) {
         if (layoutPosition != RecyclerView.NO_POSITION) {
             if (isEnglish) {
-                itemView.findViewById<TextView>(R.id.header_textview_recycler_item).text =
+                itemView.findViewById<TextView>(R.id.main_header_textview_recycler_item).text =
                     dataWord.word
-                itemView.findViewById<TextView>(R.id.description_textview_recycler_item).text =
+                itemView.findViewById<TextView>(R.id.main_description_textview_recycler_item).text =
                     dataWord.translation
             } else {
-                itemView.findViewById<TextView>(R.id.header_textview_recycler_item).text =
+                itemView.findViewById<TextView>(R.id.main_header_textview_recycler_item).text =
                     dataWord.translation
-                itemView.findViewById<TextView>(R.id.description_textview_recycler_item).text =
+                itemView.findViewById<TextView>(R.id.main_description_textview_recycler_item).text =
                     dataWord.word
             }
-            itemView.setOnClickListener { openInNewWindow(dataWord) }
+            itemView.setOnClickListener {
+                if (itemView.findViewById<Group>(R.id.main_translations_elements).visibility ==
+                    View.VISIBLE) {
+                    itemView.findViewById<Group>(R.id.main_translations_elements).visibility =
+                        View.GONE
+                } else {
+                    itemView.findViewById<Group>(R.id.main_translations_elements).visibility =
+                        View.VISIBLE
+                }
+                openInNewWindow(dataWord)
+            }
+            itemView.findViewById<Group>(R.id.main_translations_elements).visibility = View.GONE
         }
     }
 
