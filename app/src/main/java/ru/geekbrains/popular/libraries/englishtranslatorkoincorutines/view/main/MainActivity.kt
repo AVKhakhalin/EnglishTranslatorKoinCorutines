@@ -30,6 +30,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelToDataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.base.BaseActivity
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseFragment
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.ItemTouchHelperCallback
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.MainAdapterTouch
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
@@ -59,6 +60,12 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // ThemeColors
     private var themeColorsImpl: ThemeColorsImpl = getKoin().get()
     //endregion
+
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        binding.successLinearLayout.visibility = View.VISIBLE
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -195,8 +202,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             // Установка ранее заданного слова
             // TODO
             // Событие установки поискового запроса
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
+                    binding.successLinearLayout.visibility = View.VISIBLE
                     model.getData(query)
                     return false
                 }
@@ -261,6 +269,12 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.bottomNavigationMenu.bottomAppBar.menu
                 .getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX).setOnMenuItemClickListener {
                     binding.successLinearLayout.visibility = View.INVISIBLE
+//                    model.getData("")
+                    supportFragmentManager
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.activity_fragments_container, ShowDatabaseFragment.newInstance())
+                        .commit()
                     true
                 }
             // Установка события смены темы приложения

@@ -15,6 +15,8 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repo
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room.HistoryDataBase
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.network.NetworkStatus
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseInteractor
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
@@ -49,4 +51,9 @@ val mainScreen = module {
             )
     }
     factory { MainViewModel(get()) }
+}
+
+val showDataBaseScreen = module {
+    factory { ShowDatabaseViewModel(get()) }
+    factory { ShowDatabaseInteractor(get(named(Constants.NAME_LOCAL)))}
 }
