@@ -29,7 +29,7 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
         val newMeanings = arrayListOf<Meanings>()
         for (meaning in dataModel.meanings) {
             if (meaning.translation != null && !meaning.translation.translation.isNullOrBlank()) {
-                newMeanings.add(Meanings(meaning.translation, meaning.imageUrl))
+                newMeanings.add(Meanings(meaning.translation, meaning.previewUrl, meaning.imageUrl))
             }
         }
         if (newMeanings.isNotEmpty()) {
@@ -67,7 +67,7 @@ fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
             if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
                 null
             } else {
-                HistoryEntity(searchResult[0].text!!, null)
+                HistoryEntity(searchResult[0].text!!, null, null, null)
             }
         }
         else -> null
@@ -80,10 +80,10 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
         it.forEach { it ->
             dataWord.add(
                 DataWord(
-                it.text.toString(),
-                it.meanings?.get(0)?.translation?.translation.toString(),
-                "",
-                "",
+                "${it.text}",
+                "${it.meanings?.get(0)?.translation?.translation}",
+                "https:${it.meanings?.get(0)?.previewUrl}",
+                "https:${it.meanings?.get(0)?.imageUrl}",
                 "",
                 "")
             )

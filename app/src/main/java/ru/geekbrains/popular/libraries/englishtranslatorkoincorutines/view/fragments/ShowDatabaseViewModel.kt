@@ -22,7 +22,6 @@ class ShowDatabaseViewModel (
     }
 
     private suspend fun startInteractor(word: String, isOnline: Boolean) {
-//        _mutableLiveData.postValue(parseLocalSearchResults(interactor.getData(word, isOnline)))
         _mutableLiveData.postValue(interactor.getData(word))
     }
 

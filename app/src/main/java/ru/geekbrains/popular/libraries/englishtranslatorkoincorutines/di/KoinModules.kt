@@ -20,6 +20,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragm
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader.GlideImageLoaderImpl
 
 val application = module {
     // Локальная база данных
@@ -39,7 +40,8 @@ val application = module {
     single<ResourcesProviderImpl> { ResourcesProviderImpl(androidContext()) }
     // Получение доступа к цветам темы
     single<ThemeColorsImpl> { ThemeColorsImpl() }
-
+    // Загрузка изображений с помощью библиотеки Glide
+    single<GlideImageLoaderImpl> { GlideImageLoaderImpl() }
 }
 
 val mainScreen = module {

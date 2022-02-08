@@ -23,6 +23,7 @@ def retrofitRxjava3Version = "2.9.0"
 def retrofitInterceptorVersion = "3.12.1"
 def okHTTPVersion = "4.6.0"
 def glideVersion = "4.11.0"
+def picassoVersion = "2.71828"
 //def rxJavaVersion = "3.0.0"
 def rxJavaAndroidVersion = "2.1.1"
 def rxJavaRxJavaVersion = "3.0.0-RC3"
@@ -109,6 +110,10 @@ ext {
     libs.glide = glide
     glide.runtime = "com.github.bumptech.glide:glide:$glideVersion"
     glide.compiler = "com.github.bumptech.glide:compiler:$glideVersion"
+    // Picasso
+    picasso = [:]
+    libs.picasso = picasso
+    picasso.runtime = "com.squareup.picasso:picasso:$picassoVersion"
     // RxJava
     rxJava = [:]
     libs.rxJava = rxJava

@@ -14,6 +14,10 @@ class MainAdapterTouch (
     // Признак перевода английского слова (true - английское слово; false - русское слово)
     private var isEnglish: Boolean
 ): RecyclerView.Adapter<BaseViewHolder>(), ItemTouchHelperAdapter {
+    /** Задание переменных */ //region
+    // View, по которой кликнули в предыдущий раз
+    var oldView: View? = null
+    //endregion
 
     fun setData(dataWord: MutableList<DataWord>, isEnglish: Boolean) {
         this.isEnglish = isEnglish
@@ -24,11 +28,12 @@ class MainAdapterTouch (
     //region БАЗОВЫЕ МЕТОДЫ ДЛЯ РАБОТЫ АДАПТЕРА
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         return WordViewHolder(
+            this,
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.activity_main_recyclerview_item, parent, false) as View,
             onListItemClickListener
-        )
-    }
+            )
+        }
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         (holder).bind(dataWord[position], isEnglish)
     }

@@ -74,9 +74,11 @@ dependencies {
     // RxJava
     implementation libs.rxJava.android
     implementation libs.rxJava.reactive
-/*    // Glide
+    // Glide
     implementation libs.glide.runtime
-    kapt libs.glide.compiler */
+    kapt libs.glide.compiler
+    // Picasso
+    implementation libs.picasso.runtime
 /*    // OkHTTP
     implementation libs.okHTTP.runtime */
     // Retrofit

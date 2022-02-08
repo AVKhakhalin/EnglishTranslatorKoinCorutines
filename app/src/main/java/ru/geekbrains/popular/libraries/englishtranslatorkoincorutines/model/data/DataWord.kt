@@ -6,14 +6,14 @@ class DataWord() {
     var word: String = ""
     // Перевод слова
     var translation: String = ""
-    // Ссылка на транскрипцию слова
-    var linkTranscription: String = ""
-    // Ссылка на аудио-файл с произношением слова
-    var linkSound: String = ""
     // Ссылка на пиктограмму с уменьшенным изображением значения слова
     var linkPictogram: String = ""
     // Ссылка на картинку с изображением значения слова
     var linkImage: String = ""
+    // Ссылка на транскрипцию слова
+    var linkTranscription: String = ""
+    // Ссылка на аудио-файл с произношением слова
+    var linkSound: String = ""
     //endregion
 
     // Второй конструктор класса
@@ -21,17 +21,17 @@ class DataWord() {
     constructor(
         word: String,
         translation: String,
-        linkTranscription: String,
-        linkSound: String,
         linkPictogram: String,
-        linkImage: String
+        linkImage: String,
+        linkTranscription: String,
+        linkSound: String
     ): this() {
         this.word = word
         this.translation = translation
-        this.linkTranscription = linkTranscription
-        this.linkSound = linkSound
         this.linkPictogram = linkPictogram
         this.linkImage = linkImage
+        this.linkTranscription = linkTranscription
+        this.linkSound = linkSound
     }
 
     //region Установка правила сравнения двух классов Favorite
@@ -43,12 +43,6 @@ class DataWord() {
         if (word != other.word) {
             return false
         }
-        if (translation != other.translation) {
-            return false
-        }
-        if (linkTranscription != other.linkTranscription) {
-            return false
-        }
         if (linkSound != other.linkSound) {
             return false
         }
@@ -56,6 +50,12 @@ class DataWord() {
             return false
         }
         if (linkImage != other.linkImage) {
+            return false
+        }
+        if (translation != other.translation) {
+            return false
+        }
+        if (linkTranscription != other.linkTranscription) {
             return false
         }
         return true
