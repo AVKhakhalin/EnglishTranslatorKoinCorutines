@@ -51,10 +51,14 @@ class WordViewHolder(
                     // Сохранение текущей View
                     mainAdapterTouch.oldView = itemView
                     // Отображение развёрнутого описания слова
-                    itemView.findViewById<TextView>(
-                        R.id.main_translations_textview_recycler_item).visibility = View.VISIBLE
-                    itemView.findViewById<TextView>(
-                        R.id.main_translations_textview_recycler_item).setText(dataWord.translation) // TODO
+                    if (dataWord.allMeanings != "") {
+                        itemView.findViewById<TextView>(
+                            R.id.main_translations_textview_recycler_item
+                        ).visibility = View.VISIBLE
+                        itemView.findViewById<TextView>(
+                            R.id.main_translations_textview_recycler_item
+                        ).setText(dataWord.allMeanings)
+                    }
                     // Установка картинки для слова
                     glideImageLoaderImpl.loadInto(dataWord.linkImage,
                         itemView.findViewById<ImageView>(
@@ -86,17 +90,17 @@ class WordViewHolder(
                     constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
                         0)
                     constraintSet.applyTo(constraintLayout)
-                    // Сохранение текущей View
-                    mainAdapterTouch.oldView = itemView
 
                     if (mainAdapterTouch.oldView != itemView) {
                         // Отображение развёрнутого описания слова
-                        itemView.findViewById<TextView>(
-                            R.id.main_translations_textview_recycler_item
-                        ).visibility = View.VISIBLE
-                        itemView.findViewById<TextView>(
-                            R.id.main_translations_textview_recycler_item)
-                            .setText(dataWord.translation) // TODO
+                        if (dataWord.allMeanings != "") {
+                            itemView.findViewById<TextView>(
+                                R.id.main_translations_textview_recycler_item
+                            ).visibility = View.VISIBLE
+                            itemView.findViewById<TextView>(
+                                R.id.main_translations_textview_recycler_item
+                            ).setText(dataWord.allMeanings)
+                        }
                         // Установка картинки для слова
                         glideImageLoaderImpl.loadInto(
                             dataWord.linkImage,
@@ -116,6 +120,8 @@ class WordViewHolder(
                             ConstraintSet.WRAP_CONTENT
                         )
                         constraintSet.applyTo(constraintLayout)
+                        // Сохранение текущей View
+                        mainAdapterTouch.oldView = itemView
                     } else {
                         // Обнуление данных о предыдущей вью,
                         // потому что пользователь просто закрыл только что открытую вью

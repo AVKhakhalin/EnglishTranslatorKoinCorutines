@@ -14,6 +14,8 @@ class DataWord() {
     var linkTranscription: String = ""
     // Ссылка на аудио-файл с произношением слова
     var linkSound: String = ""
+    // Развернутое описание слова
+    var allMeanings: String = ""
     //endregion
 
     // Второй конструктор класса
@@ -24,7 +26,8 @@ class DataWord() {
         linkPictogram: String,
         linkImage: String,
         linkTranscription: String,
-        linkSound: String
+        linkSound: String,
+        allMeanings: String
     ): this() {
         this.word = word
         this.translation = translation
@@ -32,6 +35,7 @@ class DataWord() {
         this.linkImage = linkImage
         this.linkTranscription = linkTranscription
         this.linkSound = linkSound
+        this.allMeanings = allMeanings
     }
 
     //region Установка правила сравнения двух классов Favorite
@@ -56,6 +60,9 @@ class DataWord() {
             return false
         }
         if (linkTranscription != other.linkTranscription) {
+            return false
+        }
+        if (allMeanings != other.allMeanings) {
             return false
         }
         return true

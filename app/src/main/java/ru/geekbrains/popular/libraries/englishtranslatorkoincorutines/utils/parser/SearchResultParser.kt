@@ -67,7 +67,11 @@ fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
             if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
                 null
             } else {
-                HistoryEntity(searchResult[0].text!!, null, null, null)
+                HistoryEntity("${searchResult[0].text}",
+                    "${searchResult[0].meanings!![0].translation}",
+                    "${searchResult[0].meanings!![0].previewUrl}",
+                    "${searchResult[0].meanings!![0].imageUrl}"
+                )
             }
         }
         else -> null
@@ -78,6 +82,16 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
     var dataWord: MutableList<DataWord> = mutableListOf()
     dataModel?.let {
         it.forEach { it ->
+            var allMeanings: String = ""
+            it.meanings?.let { meaningsList ->
+                meaningsList.forEachIndexed { index, meanings ->
+                    if (index > 0) {
+                        allMeanings = if (index < meaningsList.count() - 1)
+                            "$allMeanings${meanings.translation?.translation}, " else
+                            "$allMeanings${meanings.translation?.translation}"
+                    }
+                }
+            }
             dataWord.add(
                 DataWord(
                 "${it.text}",
@@ -85,7 +99,8 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
                 "https:${it.meanings?.get(0)?.previewUrl}",
                 "https:${it.meanings?.get(0)?.imageUrl}",
                 "",
-                "")
+                "",
+                allMeanings)
             )
         }
     }
