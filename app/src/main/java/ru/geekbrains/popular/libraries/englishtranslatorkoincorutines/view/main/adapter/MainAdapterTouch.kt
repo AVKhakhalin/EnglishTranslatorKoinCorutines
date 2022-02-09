@@ -3,6 +3,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
@@ -17,6 +18,7 @@ class MainAdapterTouch (
     /** Задание переменных */ //region
     // View, по которой кликнули в предыдущий раз
     var oldView: View? = null
+    var positionOldView: Int? = null
     //endregion
 
     fun setData(dataWord: MutableList<DataWord>, isEnglish: Boolean) {
@@ -39,6 +41,23 @@ class MainAdapterTouch (
     }
     override fun getItemCount(): Int {
         return dataWord.size
+    }
+    //endregion
+
+    //region МЕТОДЫ ДЛЯ ОТСЛЕЖИВАНИЯ ПРИКРЕПЛЕНИЯ ЭЛЕМЕНТА К ОКНУ ИЛИ ЕГО ОТКРЕПЛЕНИЯ ОТ ОКНА
+    // Этими методами решается проблема отображения одной и той же картики на элементах,
+    // првышающих максимальное количество элементов, отображаемых на экране (~ > 10)
+    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        if (oldView != null) {
+            holder.clearDuplicateAttach()
+        }
+    }
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        if (oldView != null) {
+            holder.clearDuplicateDetach()
+        }
     }
     //endregion
 

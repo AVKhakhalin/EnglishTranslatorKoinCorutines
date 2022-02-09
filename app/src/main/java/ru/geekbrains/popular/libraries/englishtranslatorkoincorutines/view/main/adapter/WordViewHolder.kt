@@ -3,7 +3,6 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +14,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils
 
 class WordViewHolder(
     private val mainAdapterTouch: MainAdapterTouch,
-    private val view: View,
+    view: View,
     private val onListItemClickListener: OnListItemClickListener
 ): BaseViewHolder(view), ItemTouchHelperViewHolder {
     /** Задание переменных */ //region
@@ -26,10 +25,14 @@ class WordViewHolder(
     // ConstraintLayout
     private var constraintLayout: ConstraintLayout? = null
     private val constraintSet: ConstraintSet = ConstraintSet()
+    // CurrentDataWord
+    private var currentDataWord: DataWord? = null
     //endregion
 
     override fun bind(dataWord: DataWord, isEnglish: Boolean) {
         if (layoutPosition != RecyclerView.NO_POSITION) {
+            // Сохранение dataWord
+            currentDataWord = dataWord
             // Установка слова и его перевода
             if (isEnglish) {
                 itemView.findViewById<TextView>(R.id.main_header_textview_recycler_item).text =
@@ -42,98 +45,63 @@ class WordViewHolder(
                 itemView.findViewById<TextView>(R.id.main_description_textview_recycler_item).text =
                     dataWord.word
             }
+            // Установка развёрнутого описания слова
+            itemView.findViewById<TextView>(
+                R.id.main_translations_textview_recycler_item
+            ).setText(dataWord.allMeanings)
             // Установка пиктограммы слова
             glideImageLoaderImpl.loadInto(dataWord.linkImage,
                 itemView.findViewById<ImageView>(R.id.main_word_pictogram))
+            // Установка картинки для слова
+            glideImageLoaderImpl.loadInto(
+                dataWord.linkImage,
+                itemView.findViewById<ImageView>(
+                    R.id.main_translations_image_recycler_item
+                )
+            )
             // Установка слушателя при нажатии на контейнер со словом
             itemView.setOnClickListener {
                 if (mainAdapterTouch.oldView == null) {
                     // Сохранение текущей View
                     mainAdapterTouch.oldView = itemView
-                    // Отображение развёрнутого описания слова
-                    if (dataWord.allMeanings != "") {
-                        itemView.findViewById<TextView>(
-                            R.id.main_translations_textview_recycler_item
-                        ).visibility = View.VISIBLE
-                        itemView.findViewById<TextView>(
-                            R.id.main_translations_textview_recycler_item
-                        ).setText(dataWord.allMeanings)
-                    }
-                    // Установка картинки для слова
-                    glideImageLoaderImpl.loadInto(dataWord.linkImage,
-                        itemView.findViewById<ImageView>(
-                            R.id.main_translations_image_recycler_item))
-                    // Изменение размеров ImageView картинки для её отображения
-                    constraintLayout =
-                        itemView.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.constrainWidth(R.id.main_translations_image_recycler_item,
-                        ConstraintSet.MATCH_CONSTRAINT)
-                    constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
-                        ConstraintSet.WRAP_CONTENT)
-                    constraintSet.applyTo(constraintLayout)
-                    Toast.makeText(view.context, "$adapterPosition", Toast.LENGTH_SHORT).show()
+                    mainAdapterTouch.positionOldView = adapterPosition
+                    // Отображение дополнительной информации у элемента
+                    showAdditionalInfoForElement(dataWord)
                 } else {
-                    // Скрытие развёрнутого описания слова у предыдущей ImageView
-                    mainAdapterTouch.oldView?.let {
-                        it.findViewById<TextView>(R.id.main_translations_textview_recycler_item)
-                            .visibility = View.GONE
-                    }
-                    // Восстановление нулевых размеров предыдущей ImageView для её скрытия
-                    constraintLayout =
-                        mainAdapterTouch.oldView?.let {
-                            it.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
-                        }
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.constrainWidth(R.id.main_translations_image_recycler_item,
-                        0)
-                    constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
-                        0)
-                    constraintSet.applyTo(constraintLayout)
-
+                    // Скрытие дополнительной информации у элемента
+                    hideAdditionalInfoForElement()
+                    // Проверка наличия не скрытого элемента c oldView
                     if (mainAdapterTouch.oldView != itemView) {
-                        // Отображение развёрнутого описания слова
-                        if (dataWord.allMeanings != "") {
-                            itemView.findViewById<TextView>(
-                                R.id.main_translations_textview_recycler_item
-                            ).visibility = View.VISIBLE
-                            itemView.findViewById<TextView>(
-                                R.id.main_translations_textview_recycler_item
-                            ).setText(dataWord.allMeanings)
-                        }
-                        // Установка картинки для слова
-                        glideImageLoaderImpl.loadInto(
-                            dataWord.linkImage,
-                            itemView.findViewById<ImageView>(
-                                R.id.main_translations_image_recycler_item
-                            )
-                        )
-                        // Изменение размеров ImageView картинки для её отображения
-                        constraintLayout =
-                            itemView.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
-                        val constraintSet = ConstraintSet()
-                        constraintSet.clone(constraintLayout)
-                        constraintSet.constrainWidth(R.id.main_translations_image_recycler_item,
-                            ConstraintSet.MATCH_CONSTRAINT
-                        )
-                        constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
-                            ConstraintSet.WRAP_CONTENT
-                        )
-                        constraintSet.applyTo(constraintLayout)
+                        // Отображение дополнительной информации у элемента
+                        showAdditionalInfoForElement(dataWord)
                         // Сохранение текущей View
                         mainAdapterTouch.oldView = itemView
+                        mainAdapterTouch.positionOldView = adapterPosition
                     } else {
                         // Обнуление данных о предыдущей вью,
                         // потому что пользователь просто закрыл только что открытую вью
                         mainAdapterTouch.oldView = null
+                        mainAdapterTouch.positionOldView = null
                     }
-                    Toast.makeText(view.context, "Else: $adapterPosition",
-                        Toast.LENGTH_SHORT).show()
                 }
 //                openInNewWindow(dataWord)
             }
         }
     }
+
+    //region МЕТОДЫ ДЛЯ РЕШЕНИЯ ВОПРОСА С ДУБЛИРОВАНИЕМ ОТОБРАЖЕНИЯ КАРТИНКИ В ЭЛЕМЕНТАХ (~ >10)
+    override fun clearDuplicateAttach() {
+        if (mainAdapterTouch.positionOldView == adapterPosition) {
+            showAdditionalInfoForElement(currentDataWord)
+        }
+    }
+    override fun clearDuplicateDetach() {
+        if (mainAdapterTouch.positionOldView == adapterPosition) {
+            // Скрытие дополнительной информации у элемента
+            hideAdditionalInfoForElement()
+        }
+    }
+    //endregion
 
     //region МЕТОДЫ ItemTouchHelperViewHolder ДЛЯ РАБОТЫ СО СМАХИВАНИЕМ (ВЫДЕЛЕНИЕ И ОЧИСТКА)
     override fun onItemSelected() {
@@ -146,5 +114,47 @@ class WordViewHolder(
 
     private fun openInNewWindow(dataWord: DataWord) {
         onListItemClickListener.onItemClick(dataWord)
+    }
+
+    // Скрытие дополнительной информации у элемента
+    private fun hideAdditionalInfoForElement() {
+        // Скрытие развёрнутого описания слова у предыдущей ImageView
+        mainAdapterTouch.oldView?.let {
+            it.findViewById<TextView>(R.id.main_translations_textview_recycler_item)
+                .visibility = View.GONE
+        }
+        // Восстановление нулевых размеров предыдущей ImageView для её скрытия
+        constraintLayout =
+            mainAdapterTouch.oldView?.let {
+                it.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
+            }
+        constraintSet.clone(constraintLayout)
+        constraintSet.constrainWidth(R.id.main_translations_image_recycler_item,
+            0)
+        constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
+            0)
+        constraintSet.applyTo(constraintLayout)
+    }
+
+    private fun showAdditionalInfoForElement(dataWord: DataWord?) {
+        // Отображение развёрнутого описания слова
+        dataWord?.let { dataWord ->
+            if ((dataWord.allMeanings != "") && (dataWord.allMeanings != dataWord.translation)) {
+                itemView.findViewById<TextView>(
+                    R.id.main_translations_textview_recycler_item
+                ).visibility = View.VISIBLE
+            }
+        }
+        // Изменение размеров ImageView картинки для её отображения
+        constraintLayout =
+            itemView.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
+        constraintSet.clone(constraintLayout)
+        constraintSet.constrainWidth(R.id.main_translations_image_recycler_item,
+            ConstraintSet.MATCH_CONSTRAINT
+        )
+        constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
+            ConstraintSet.WRAP_CONTENT
+        )
+        constraintSet.applyTo(constraintLayout)
     }
 }

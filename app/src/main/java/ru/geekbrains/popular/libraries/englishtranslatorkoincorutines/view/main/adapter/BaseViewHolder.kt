@@ -6,4 +6,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
 
 abstract class BaseViewHolder(view: View): RecyclerView.ViewHolder(view) {
     abstract fun bind(data: DataWord, isEnglish: Boolean)
+
+    abstract fun clearDuplicateAttach()
+    abstract fun clearDuplicateDetach()
 }
