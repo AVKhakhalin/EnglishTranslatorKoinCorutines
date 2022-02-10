@@ -32,7 +32,8 @@ class MainAdapterTouch (
         return WordViewHolder(
             this,
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.activity_main_recyclerview_item, parent, false) as View,
+                .inflate(R.layout.activity_main_recyclerview_item, parent, false)
+                    as View,
             onListItemClickListener
             )
         }
@@ -75,6 +76,7 @@ class MainAdapterTouch (
     //endregion
 
     //region МЕТОД И КЛАСС ДЛЯ ДИНАМИЧЕСКОГО ОБНОВЛЕНИЯ СПИСКА
+    // НАСТРОЕН, НО НЕ ИСПОЛЬЗУЕТСЯ
     fun submitList(newDataWord: List<DataWord>) {
         val oldDataWord: List<DataWord> = dataWord
         val diffResult: DiffUtil.DiffResult =
@@ -103,4 +105,6 @@ class MainAdapterTouch (
         }
     }
     //endregion
+
+
 }

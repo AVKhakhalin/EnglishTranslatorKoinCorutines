@@ -1,10 +1,10 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.Meanings
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.*
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room.HistoryEntity
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 fun parseSearchResults(state: AppState): AppState {
     val newSearchResults = arrayListOf<DataModel>()
@@ -29,7 +29,10 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
         val newMeanings = arrayListOf<Meanings>()
         for (meaning in dataModel.meanings) {
             if (meaning.translation != null && !meaning.translation.translation.isNullOrBlank()) {
-                newMeanings.add(Meanings(meaning.translation, meaning.previewUrl, meaning.imageUrl))
+                newMeanings.add(Meanings(
+                    meaning.translation,
+                    meaning.previewUrl,
+                    meaning.imageUrl))
             }
         }
         if (newMeanings.isNotEmpty()) {
@@ -50,11 +53,35 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
     return meaningsSeparatedByComma
 }
 
-fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModel> {
+fun mapHistoryEntityToSearchResult(word: String, list: List<HistoryEntity>): List<DataModel> {
     val searchResult = ArrayList<DataModel>()
     if (!list.isNullOrEmpty()) {
-        for (entity in list) {
-            searchResult.add(DataModel(entity.word, null))
+        if (word == "") {
+            searchResult.add(DataModel(
+                "Для поиска в базе данных воспользуйтесь поисковым полем. " +
+                        "\nВывести всю имеющуюся информацию можно по запросу \"*\"", null))
+        } else {
+            for (entity in list) {
+                if (word == "*") {
+                    searchResult.add(DataModel(
+                        entity.word,
+                        listOf<Meanings>(Meanings(
+                            Translation("${entity.allMeanings}"),
+                            "${entity.previewUrl}", "${entity.imageUrl}"))
+                    ))
+                } else if (entity.word.indexOf(word, 0) > -1) {
+                    searchResult.add(DataModel(
+                        entity.word,
+                        listOf<Meanings>(Meanings(
+                        Translation("${entity.allMeanings}"),
+                        "${entity.previewUrl}", "${entity.imageUrl}"))
+                    ))
+                }
+            }
+            if (searchResult.size == 0)
+                searchResult.add(DataModel(
+                "В базе данных нет слова \"$word\"." +
+                        "\nВывести всю имеющуюся информацию можно по запросу \"*\"", null))
         }
     }
     return searchResult
@@ -66,12 +93,23 @@ fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
             val searchResult = appState.data
             if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
                 null
-            } else {
+            } else if (searchResult[0].meanings != null) {
+                var allMeanings: String = ""
+                searchResult[0].meanings?.let { meaningsList ->
+                    meaningsList.forEachIndexed { index, meanings ->
+                        // Отбрасываем первое значение, чтобы оно не дублировалось с meanings
+                        allMeanings = "$allMeanings${meanings.translation?.translation}" +
+                                if (index < meaningsList.count() - 1) ", " else ""
+                    }
+                }
                 HistoryEntity("${searchResult[0].text}",
-                    "${searchResult[0].meanings!![0].translation}",
+                    "${searchResult[0].meanings!![0].translation?.translation}",
                     "${searchResult[0].meanings!![0].previewUrl}",
-                    "${searchResult[0].meanings!![0].imageUrl}"
+                    "${searchResult[0].meanings!![0].imageUrl}",
+                    allMeanings
                 )
+            } else {
+                null
             }
         }
         else -> null
@@ -85,11 +123,8 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
             var allMeanings: String = ""
             it.meanings?.let { meaningsList ->
                 meaningsList.forEachIndexed { index, meanings ->
-                    if (index > 0) {
-                        allMeanings = if (index < meaningsList.count() - 1)
-                            "$allMeanings${meanings.translation?.translation}, " else
-                            "$allMeanings${meanings.translation?.translation}"
-                    }
+                    allMeanings = "$allMeanings${meanings.translation?.translation}" +
+                            if (index < meaningsList.count() - 1) ", " else ""
                 }
             }
             dataWord.add(
@@ -105,4 +140,40 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
         }
     }
     return dataWord
+}
+
+
+fun convertDataWordToDataModel(dataWord: DataWord): MutableList<DataModel> {
+    var dataModel: MutableList<DataModel> = mutableListOf()
+    var meanings: MutableList<Meanings> = mutableListOf(Meanings(Translation(dataWord.translation),
+                                                        dataWord.linkPictogram,
+                                                        dataWord.linkImage))
+    val allMeanings: List<String> = dataWord.allMeanings.split(", ")
+
+    allMeanings.forEachIndexed { index, meaning ->
+        if ((meaning.indexOf(dataWord.translation) == -1) &&
+            (meaning.length != dataWord.translation.length)) {
+            meanings.add(
+                Meanings(
+                    Translation(allMeanings[index]),
+                    "",
+                    ""
+                )
+            )
+        }
+    }
+    dataModel.add(DataModel(dataWord.word, meanings))
+    return dataModel
+}
+
+// Определение языка (английский - true, русский - false) вводимого слова
+fun isEnglish(word: String): Boolean {
+    /** Задание переменных */ //region
+    // Переменные для распознавания языка вводимого слова для перевода
+    val engPattern: Pattern = Pattern.compile(Constants.ENGLISH_SYMBOLS)
+    var engMatcher: Matcher = engPattern.matcher("")
+    //endregion
+
+    engMatcher = engPattern.matcher(word)
+    return engMatcher.find()
 }

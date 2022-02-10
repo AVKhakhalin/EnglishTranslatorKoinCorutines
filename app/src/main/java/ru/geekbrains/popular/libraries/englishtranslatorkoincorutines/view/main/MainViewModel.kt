@@ -7,6 +7,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataWordToDataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.isEnglish
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.parseSearchResults
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel
 
@@ -53,4 +56,9 @@ class MainViewModel (
     }
     //endregion
 
+    fun saveData(data: DataWord) {
+        viewModelCoroutineScope.launch {
+            interactor.saveDataToDB(convertDataWordToDataModel(data), isEnglish(data.word))
+        }
+    }
 }

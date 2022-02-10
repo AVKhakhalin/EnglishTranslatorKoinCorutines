@@ -1,79 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/database_relative_recycler_layout"
-    android:layout_width="match_parent"
+    android:id="@+id/database_constraint_layout"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="?attr/colorSurface">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/database_main_text_layout"
+    <RelativeLayout
+        android:id="@+id/database_relative_recycler_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/database_buttons_relative_layout"
-        android:paddingTop="@dimen/main_text_layout_padding_top"
+        android:background="?attr/colorSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/database_header_textview_recycler_item"
-            style="@style/HeaderTextStyle"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/database_main_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_medium"
-            android:textColor="?attr/colorOnSecondary"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/header_textview_recycler_item_tools_text" />
-
-        <TextView
-            android:id="@+id/database_description_textview_recycler_item"
-            style="@style/BaseTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_medium"
-            android:textColor="?attr/color"
+            android:layout_toStartOf="@+id/database_buttons_relative_layout"
+            android:paddingTop="@dimen/main_text_layout_padding_top"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/database_header_textview_recycler_item"
-            tools:text="@string/description_textview_recycler_item_tools_text" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent">
 
-    <RelativeLayout
-        android:id="@+id/database_buttons_relative_layout"
-        android:layout_width="@dimen/database_buttons_relative_layout_width"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:autofillHints="@string/database_buttons_relative_layout_hints"
-        android:paddingStart="@dimen/database_buttons_relative_layout_padding_start"
-        android:paddingBottom="@dimen/database_buttons_relative_layout_padding_bottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/database_header_textview_recycler_item"
+                style="@style/HeaderTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:textColor="?attr/colorOnSecondary"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/header_textview_recycler_item_tools_text" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/database_word_pictogram"
-            android:layout_width="@dimen/database_word_pictogram_width"
-            android:layout_height="@dimen/database_word_pictogram_height"
-            android:layout_marginTop="@dimen/database_word_pictogram_margin_top"
-            android:layout_marginEnd="@dimen/database_word_pictogram_margin_end"
-            android:background="?attr/colorOnBackground"
-            app:srcCompat="@drawable/alphabet" />
+            <TextView
+                android:id="@+id/database_description_textview_recycler_item"
+                style="@style/BaseTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:textColor="?attr/color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/database_header_textview_recycler_item"
+                tools:text="@string/description_textview_recycler_item_tools_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/database_main_delete_from_db"
-            android:layout_width="@dimen/database_main_delete_from_db_width"
-            android:layout_height="@dimen/database_main_delete_from_db_height"
+        <RelativeLayout
+            android:id="@+id/database_buttons_relative_layout"
+            android:layout_width="@dimen/database_buttons_relative_layout_width"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/database_main_delete_from_db_margin_top"
-            android:layout_marginEnd="@dimen/database_main_delete_from_db_margin_end"
-            android:background="?attr/colorOnBackground"
-            app:srcCompat="@drawable/ic_save_and_load_from_db" />
+            android:autofillHints="@string/database_buttons_relative_layout_hints"
+            android:paddingStart="@dimen/database_buttons_relative_layout_padding_start"
+            android:paddingBottom="@dimen/database_buttons_relative_layout_padding_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/database_word_pictogram"
+                android:layout_width="@dimen/database_word_pictogram_width"
+                android:layout_height="@dimen/database_word_pictogram_height"
+                android:layout_marginTop="@dimen/database_word_pictogram_margin_top"
+                android:layout_marginEnd="@dimen/database_word_pictogram_margin_end"
+                android:background="?attr/colorOnBackground"
+                app:srcCompat="@drawable/alphabet" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/database_main_delete_from_db"
+                android:layout_width="@dimen/database_main_delete_from_db_width"
+                android:layout_height="@dimen/database_main_delete_from_db_height"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/database_main_delete_from_db_margin_top"
+                android:layout_marginEnd="@dimen/database_main_delete_from_db_margin_end"
+                android:background="?attr/colorOnBackground"
+                app:srcCompat="@drawable/ic_save_and_load_from_db" />
+        </RelativeLayout>
+
+        <View xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/hairline"
+            android:background="?attr/color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </RelativeLayout>
 
-    <View xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
+        android:id="@+id/database_translations_textview_recycler_item"
+        style="@style/BaseTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/hairline"
-        android:background="?attr/color"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:textColor="?attr/color"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</RelativeLayout>
+        app:layout_constraintTop_toBottomOf="@id/database_relative_recycler_layout"
+        tools:text="@string/description_textview_recycler_item_tools_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

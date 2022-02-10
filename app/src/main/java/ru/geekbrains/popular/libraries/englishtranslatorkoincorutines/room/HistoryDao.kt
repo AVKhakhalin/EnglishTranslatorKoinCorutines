@@ -22,4 +22,7 @@ interface HistoryDao {
 
     @Delete
     suspend fun delete(entity: HistoryEntity)
+
+    @Query("DELETE from HistoryEntity WHERE word=:word")
+    suspend fun deleteDataByWord(word: String)
 }

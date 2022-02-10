@@ -12,9 +12,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.FragmentDatabaseWordsBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.adapter.DatabaseAdapter
 
-class ShowDatabaseFragment: Fragment() {
+class ShowDatabaseFragment(
+    private val word: String
+): Fragment(), DatabaseOnListItemClickListener {
     /** Задание переменных */ //region
     // Binding
     private var _binding: FragmentDatabaseWordsBinding? = null
@@ -25,12 +28,14 @@ class ShowDatabaseFragment: Fragment() {
     // ShowDatabaseViewModel
     lateinit var model: ShowDatabaseViewModel
     // DatabaseAdapter
-    private val databaseAdapter: DatabaseAdapter by lazy { DatabaseAdapter() }
+    private val databaseAdapter: DatabaseAdapter by lazy {
+        DatabaseAdapter(this@ShowDatabaseFragment)
+    }
     //endregion
 
 
     companion object {
-        fun newInstance(): ShowDatabaseFragment = ShowDatabaseFragment()
+        fun newInstance(word: String): ShowDatabaseFragment = ShowDatabaseFragment(word)
     }
 
     override fun onCreateView(
@@ -111,12 +116,22 @@ class ShowDatabaseFragment: Fragment() {
         binding.fragmentDatabaseRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.fragmentDatabaseRecyclerview.adapter = databaseAdapter
         // Получение данных из базы данных
-        model.getData("")
+        getData(word)
     }
 
     // Очистка Binding при уничтожении фрагмента
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    // Удаление элемента из базы данных
+    override fun onItemClick(word: String) {
+        model.deleteDataByWord(word)
+    }
+
+    fun getData(word: String) {
+        // Получение данных из базы данных
+        model.getData(word)
     }
 }

@@ -3,20 +3,28 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.frag
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.DatabaseOnListItemClickListener
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
 
-class DatabaseAdapter: RecyclerView.Adapter<DatabaseAdapter.RecyclerItemViewHolder>() {
+class DatabaseAdapter(
+    private val databaseOnListItemClickListener: DatabaseOnListItemClickListener
+): RecyclerView.Adapter<DatabaseAdapter.RecyclerItemViewHolder>() {
     /** Задание переменных */ //region
-    private var data: List<DataModel> = arrayListOf()
+    private var dataModel: MutableList<DataModel> = mutableListOf()
     //endregion
 
 
-    fun setData(data: List<DataModel>) {
-        this.data = data
+    fun setData(dataModel: List<DataModel>) {
+        dataModel.forEach {
+            this.dataModel.add(it)
+        }
         notifyDataSetChanged()
     }
 
@@ -28,21 +36,36 @@ class DatabaseAdapter: RecyclerView.Adapter<DatabaseAdapter.RecyclerItemViewHold
     }
 
     override fun onBindViewHolder(holder: RecyclerItemViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(dataModel[position])
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return dataModel.size
     }
 
-    inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class RecyclerItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
                 itemView.findViewById<TextView>(R.id.database_header_textview_recycler_item).text =
                     data.text
-                itemView.setOnClickListener {
-                    Toast.makeText(itemView.context, "on click: ${data.text}", Toast.LENGTH_SHORT)
-                        .show()
+                data.meanings?.let { meanings ->
+                    itemView.findViewById<TextView>(
+                        R.id.database_description_textview_recycler_item).text =
+                        meanings[0].translation?.translation
+//                    itemView.findViewById<TextView>(
+//                        R.id.database_translations_textview_recycler_item).text =
+//                        meanings[0].translation?.translation
+                    itemView.findViewById<ImageView>(R.id.database_main_delete_from_db)
+                        .setOnClickListener {
+                        Toast.makeText(itemView.context, "Слово ${data.text} удалено",
+                            Toast.LENGTH_SHORT).show()
+                        // Удаление выбранного слова из базы данных
+                        databaseOnListItemClickListener.onItemClick("${data.text}")
+                        // Удаление выбранного слова из адаптера
+                        dataModel.remove(data)
+                        // Скрытие удалённого элемента в списке
+                        notifyItemRemoved(adapterPosition)
+                    }
                 }
             }
         }

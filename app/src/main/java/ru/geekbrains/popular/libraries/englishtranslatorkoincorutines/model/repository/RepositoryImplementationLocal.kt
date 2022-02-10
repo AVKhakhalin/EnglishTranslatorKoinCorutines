@@ -4,8 +4,9 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource.DataSourceLocal
 
-class RepositoryImplementationLocal(private val dataSource: DataSourceLocal<List<DataModel>>):
-    RepositoryLocal<List<DataModel>> {
+class RepositoryImplementationLocal(
+    private val dataSource: DataSourceLocal<List<DataModel>>
+): RepositoryLocal<List<DataModel>> {
 
     override suspend fun getData(word: String): List<DataModel> {
         return dataSource.getData(word)
@@ -13,5 +14,9 @@ class RepositoryImplementationLocal(private val dataSource: DataSourceLocal<List
 
     override suspend fun saveToDB(appState: AppState) {
         dataSource.saveToDB(appState)
+    }
+
+    override suspend fun deleteDataByWord(word: String) {
+        dataSource.deleteFromDB(word)
     }
 }

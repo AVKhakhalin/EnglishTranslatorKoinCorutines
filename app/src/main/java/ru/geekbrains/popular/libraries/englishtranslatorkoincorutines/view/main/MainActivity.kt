@@ -42,29 +42,29 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // Binding
     private lateinit var binding: ActivityMainBinding
     // MainAdapter
-//    private var adapter: MainAdapter? = null
     private var adapter: MainAdapterTouch? = null
-    // Bottom navigation menu (признако основного состояния Main State - когда можно вводить слова)
+    // Bottom navigation menu (признак основного состояния Main State - когда можно вводить слова)
     private var isMain: Boolean = false
-    // Установка темы приложения
+    // Признак темы приложения
     private var isThemeDay: Boolean = true
-    // Событие: клик по элементу списка с найденными словами
-//    private val onListItemClickListener: MainAdapterTouch.OnListItemClickListener =
-//        object: MainAdapter.OnListItemClickListener {
-//            override fun onItemClick(data: DataModel) {
-//                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
-//            }
-//        }
+    // Признак отображения информации из базы данных
+    private var isDatabaseShow: Boolean = false
     // ViewModel
     override lateinit var model: MainViewModel
     // ThemeColors
     private var themeColorsImpl: ThemeColorsImpl = getKoin().get()
+    // ShowDatabaseFragment
+    private var showDatabaseFragment: ShowDatabaseFragment? = null
+    // Menu
+    private var bottomMenu: Menu? = null
     //endregion
 
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        binding.successLinearLayout.visibility = View.VISIBLE
+        // Изменение признака отображения данных из базы данных
+        isDatabaseShow = !isDatabaseShow
+        // Отображение окна с данными из базы данных
+        showDatabaseScreen(isDatabaseShow)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         // Считывание системных настроек из viewModel,
         // применение темы к приложению при повторном запуске приложения
         if (savedInstanceState == null) {
-            model.saveSettings(Settings(isThemeDay, !isMain))
+            model.saveSettings(Settings(isThemeDay, !isMain, isDatabaseShow))
         } else {
             val settings: Settings? = model.loadSettings()
             settings?.let {
@@ -99,6 +99,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         themeColorsImpl.initiateColors(theme)
         // Начальная установка доступности поискового поля
         switchBottomAppBar()
+        // Отображение окна работы с базой данных
+        showDatabaseScreen(isDatabaseShow)
         // Установка события нажатия на нижниюю FAB для открытия и закрытия поискового элемента
         binding.bottomNavigationMenu.bottomAppBarFab.setOnClickListener {
             switchBottomAppBar()
@@ -133,7 +135,10 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                         val adapter = MainAdapterTouch(
                                 object: OnListItemClickListener {
                                     override fun onItemClick(data: DataWord) {
-                                        Toast.makeText(this@MainActivity, data.word, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@MainActivity,
+                                            "Слово ${data.word} сохранено",
+                                            Toast.LENGTH_SHORT).show()
+                                        model.saveData(data)
                                     }
                                 }, dataWord, isEnglish
                             )
@@ -191,8 +196,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 ContextCompat.getDrawable(this, R.drawable.ic_back_fab)
             )
             binding.bottomNavigationMenu.bottomAppBar.replaceMenu(
-                R.menu.bottom_menu_bottom_bar_other_screen
-            )
+                R.menu.bottom_menu_bottom_bar_other_screen)
+            bottomMenu = binding.bottomNavigationMenu.bottomAppBar.menu
 
             //region НАСТРОЙКИ ПОИСКОВОГО ПОЛЯ
             // Установка поискового поля
@@ -204,8 +209,25 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             // Событие установки поискового запроса
             searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    binding.successLinearLayout.visibility = View.VISIBLE
-                    model.getData(query)
+                    if (isDatabaseShow) {
+                        // Отправка запроса непосредственно к базе данных
+                        // для отображения результата на странице фрагмента
+//                        showDatabaseFragment?.let {
+//                            it.getData(query)
+//                        }
+
+                        // Начальное открытие фрагмента
+                        showDatabaseFragment = ShowDatabaseFragment.newInstance(query)
+                        supportFragmentManager
+                            .beginTransaction()
+//                                .addToBackStack(null)
+                            .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
+                            .commit()
+                    } else {
+                        // Отправка запроса в репозиторий
+                        // для отображения результата на странице MainActivity
+                        model.getData(query)
+                    }
                     return false
                 }
 
@@ -260,21 +282,29 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.bottomNavigationMenu.bottomAppBar.fabAlignmentMode =
                 BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
             binding.bottomNavigationMenu.bottomAppBarFab.setImageDrawable(
-                ContextCompat.getDrawable(this, R.drawable.ic_plus_fab)
-            )
+                ContextCompat.getDrawable(this, R.drawable.ic_plus_fab))
             // Появление меню с настройками приложения
             binding.bottomNavigationMenu.bottomAppBar
                 .replaceMenu(R.menu.bottom_menu_navigation)
+            bottomMenu = binding.bottomNavigationMenu.bottomAppBar.menu
             // Установка события отображения сохранённых в базу данных слов (открытие нового окна)
             binding.bottomNavigationMenu.bottomAppBar.menu
                 .getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX).setOnMenuItemClickListener {
-                    binding.successLinearLayout.visibility = View.INVISIBLE
-//                    model.getData("")
-                    supportFragmentManager
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.activity_fragments_container, ShowDatabaseFragment.newInstance())
-                        .commit()
+                    isDatabaseShow = !isDatabaseShow
+                    // Отображение окна с данными из базы данных
+                    showDatabaseScreen(isDatabaseShow)
+                    if (isDatabaseShow) {
+                        // Начальное открытие фрагмента
+                        if (showDatabaseFragment == null) {
+                            showDatabaseFragment = ShowDatabaseFragment.newInstance("")
+                            supportFragmentManager
+                                .beginTransaction()
+//                            .addToBackStack(null)
+                                .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
+                                .commit()
+                            true
+                        }
+                    }
                     true
                 }
             // Установка события смены темы приложения
@@ -298,8 +328,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         val sharedPreferences: SharedPreferences =
             getSharedPreferences(Constants.SHARED_PREFERENCES_KEY, MODE_PRIVATE)
         isMain = sharedPreferences.getBoolean(
-            Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, false
-        )
+            Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, false)
         if (savedInstanceState != null) {
             isThemeDay = sharedPreferences.getBoolean(
                 Constants.SHARED_PREFERENCES_THEME_KEY, true
@@ -313,12 +342,14 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 setTheme(R.style.NightTheme)
             }
         }
+        isDatabaseShow = sharedPreferences.getBoolean(
+            Constants.SHARED_PREFERENCES_DATABASE_SCREEN, false)
     }
 
     // Установка темы приложения
     private fun setTheme() {
         isThemeDay = !isThemeDay
-        model.saveSettings(Settings(isThemeDay, isMain))
+        model.saveSettings(Settings(isThemeDay, isMain, isDatabaseShow))
         recreate()
     }
 
@@ -334,6 +365,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
         sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_THEME_KEY, isThemeDay)
         sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, !isMain)
+        sharedPreferencesEditor.putBoolean(
+            Constants.SHARED_PREFERENCES_DATABASE_SCREEN, isDatabaseShow)
         sharedPreferencesEditor.apply()
     }
 
@@ -343,6 +376,21 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             setTheme(R.style.DayTheme)
         } else {
             setTheme(R.style.NightTheme)
+        }
+    }
+
+    // Отображение и скрытие окна с данными из базы данных
+    private fun showDatabaseScreen(isDatabaseShow: Boolean) {
+        if (isDatabaseShow) {
+            binding.successLinearLayout.visibility = View.INVISIBLE
+            binding.activityFragmentsContainer.visibility = View.VISIBLE
+            bottomMenu?.getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX)?.
+                setIcon(R.drawable.ic_show_database_on)
+        } else {
+            binding.successLinearLayout.visibility = View.VISIBLE
+            binding.activityFragmentsContainer.visibility = View.INVISIBLE
+            bottomMenu?.getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX)?.
+                setIcon(R.drawable.ic_show_database)
         }
     }
 }

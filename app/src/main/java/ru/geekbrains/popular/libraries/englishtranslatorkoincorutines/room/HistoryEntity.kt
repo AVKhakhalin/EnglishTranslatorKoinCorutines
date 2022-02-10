@@ -15,5 +15,7 @@ class HistoryEntity(
     @field:ColumnInfo(name = "previewUrl")
     var previewUrl: String?,
     @field:ColumnInfo(name = "imageUrl")
-    var imageUrl: String?
+    var imageUrl: String?,
+    @field:ColumnInfo(name = "allMeanings")
+    var allMeanings: String?
 )

@@ -84,9 +84,17 @@ class WordViewHolder(
                         mainAdapterTouch.positionOldView = null
                     }
                 }
-//                openInNewWindow(dataWord)
+            }
+            // Установка слушателя при нажатии на кнопку сохранения слова в базе данных
+            itemView.findViewById<ImageView>(R.id.main_save_to_db).setOnClickListener {
+                saveWordToDatabase(dataWord)
             }
         }
+    }
+
+    // Передача события клика на кнопку добавления данного слова в базу данных
+    private fun saveWordToDatabase(dataWord: DataWord) {
+        onListItemClickListener.onItemClick(dataWord)
     }
 
     //region МЕТОДЫ ДЛЯ РЕШЕНИЯ ВОПРОСА С ДУБЛИРОВАНИЕМ ОТОБРАЖЕНИЯ КАРТИНКИ В ЭЛЕМЕНТАХ (~ >10)
@@ -112,10 +120,6 @@ class WordViewHolder(
     }
     //endregion
 
-    private fun openInNewWindow(dataWord: DataWord) {
-        onListItemClickListener.onItemClick(dataWord)
-    }
-
     // Скрытие дополнительной информации у элемента
     private fun hideAdditionalInfoForElement() {
         // Скрытие развёрнутого описания слова у предыдущей ImageView
@@ -124,15 +128,12 @@ class WordViewHolder(
                 .visibility = View.GONE
         }
         // Восстановление нулевых размеров предыдущей ImageView для её скрытия
-        constraintLayout =
-            mainAdapterTouch.oldView?.let {
+        constraintLayout = mainAdapterTouch.oldView?.let {
                 it.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
             }
         constraintSet.clone(constraintLayout)
-        constraintSet.constrainWidth(R.id.main_translations_image_recycler_item,
-            0)
-        constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
-            0)
+        constraintSet.constrainWidth(R.id.main_translations_image_recycler_item, 0)
+        constraintSet.constrainHeight(R.id.main_translations_image_recycler_item, 0)
         constraintSet.applyTo(constraintLayout)
     }
 
@@ -146,15 +147,12 @@ class WordViewHolder(
             }
         }
         // Изменение размеров ImageView картинки для её отображения
-        constraintLayout =
-            itemView.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
+        constraintLayout = itemView.findViewById<ConstraintLayout>(R.id.main_constraint_layout)
         constraintSet.clone(constraintLayout)
         constraintSet.constrainWidth(R.id.main_translations_image_recycler_item,
-            ConstraintSet.MATCH_CONSTRAINT
-        )
+            ConstraintSet.MATCH_CONSTRAINT)
         constraintSet.constrainHeight(R.id.main_translations_image_recycler_item,
-            ConstraintSet.WRAP_CONTENT
-        )
+            ConstraintSet.WRAP_CONTENT)
         constraintSet.applyTo(constraintLayout)
     }
 }

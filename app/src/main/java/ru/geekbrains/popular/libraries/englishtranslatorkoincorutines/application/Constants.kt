@@ -7,6 +7,7 @@ class Constants {
         const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
         const val SHARED_PREFERENCES_THEME_KEY: String = "Shared Preferences Is Theme Day"
         const val SHARED_PREFERENCES_MAIN_STATE_KEY: String = "Shared Preferences Is Main State"
+        const val SHARED_PREFERENCES_DATABASE_SCREEN: String = "Shared Preferences Is Database Show"
         const val BUTTON_LOAD_FROM_DB_INDEX: Int = 0
         const val BUTTON_CHANGE_THEME_INDEX: Int = 1
         const val ENGLISH_SYMBOLS = "[a-zA-Z]"

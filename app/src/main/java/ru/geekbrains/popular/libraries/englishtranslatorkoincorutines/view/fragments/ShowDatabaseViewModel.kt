@@ -33,4 +33,11 @@ class ShowDatabaseViewModel (
         _mutableLiveData.value = AppState.Success(null, true)//Set View to original state in onStop
         super.onCleared()
     }
+
+    fun deleteDataByWord(word: String) {
+        viewModelCoroutineScope.launch {
+            interactor.deleteDataByWord(word)
+        }
+
+    }
 }

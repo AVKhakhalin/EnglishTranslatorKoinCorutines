@@ -5,4 +5,6 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
 interface DataSourceLocal<T>: DataSource<T> {
 
     suspend fun saveToDB(appState: AppState)
+
+    suspend fun deleteFromDB(word: String)
 }
