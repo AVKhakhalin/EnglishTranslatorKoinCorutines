@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.java.KoinJavaComponent.getKoin
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.FragmentDatabaseWordsBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.adapter.DatabaseAdapter
 
 class ShowDatabaseFragment(
@@ -31,6 +34,8 @@ class ShowDatabaseFragment(
     private val databaseAdapter: DatabaseAdapter by lazy {
         DatabaseAdapter(this@ShowDatabaseFragment)
     }
+    // ResourcesProviderImpl
+    private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     //endregion
 
 
@@ -59,7 +64,9 @@ class ShowDatabaseFragment(
 
     private fun initViewModel() {
         if (binding.fragmentDatabaseRecyclerview.adapter != null) {
-            throw IllegalStateException("The ViewModel should be initialised first")
+            throw IllegalStateException(
+                "${resourcesProviderImpl.getString(R.string.error_textview_stub)}: ${
+                    resourcesProviderImpl.getString(R.string.viewmodel_error)}")
         }
         val viewModel: ShowDatabaseViewModel by viewModel()
         model = viewModel
@@ -73,7 +80,9 @@ class ShowDatabaseFragment(
                 showViewWorking()
                 appState.data?.let {
                     if (it.isEmpty()) {
-                        Toast.makeText(requireContext(), "В базе данных нет данных",
+                        Toast.makeText(requireContext(), "${
+                            resourcesProviderImpl.getString(R.string.error_textview_stub)}: ${
+                            resourcesProviderImpl.getString(R.string.empty_database_error)}",
                             Toast.LENGTH_SHORT).show()
                     } else {
                         setDataToAdapter(it)
@@ -93,7 +102,9 @@ class ShowDatabaseFragment(
             }
             is AppState.Error -> {
                 showViewWorking()
-                Toast.makeText(requireContext(), "В процессе загрузки данных возникла ошибка",
+                Toast.makeText(requireContext(), "${
+                    resourcesProviderImpl.getString(R.string.error_textview_stub)}: ${
+                    resourcesProviderImpl.getString(R.string.loading_dates_error)}",
                     Toast.LENGTH_SHORT).show()
             }
         }

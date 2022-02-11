@@ -5,6 +5,16 @@
     <string name="error_unknown_model_class">Неизвестный класс</string>
     <string name="reload_button">Загрузить</string>
     <string name="undefined_error">Неизвестная ошибка</string>
+    <string name="viewmodel_error">Вью модель должна быть инициализирована вначале</string>
+    <string name="empty_database_error">В базе данных нет данных</string>
+    <string name="loading_dates_error">В процессе загрузки данных возникла ошибка</string>
+    <string name="empty_request_error">Для поиска в базе данных воспользуйтесь поисковым полем.\nВывести всю имеющуюся информацию можно по запросу \"*\"</string>
+    <string name="search_info_begin">В базе данных нет слова</string>
+    <string name="search_info_end">\nВывести всю имеющуюся информацию можно по запросу "*"</string>
+    <string name="delete_word_info_begin">Слово</string>
+    <string name="delete_word_info_end">удалено</string>
+    <string name="save_word_info_begin">Слово</string>
+    <string name="save_word_info_end">сохранено</string>
     <string name="empty_server_response_on_success">Неизвестное слово</string>
     <string name="button_search">Поиск</string>
     <string name="search_hint">Новое слово</string>

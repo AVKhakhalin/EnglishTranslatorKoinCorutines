@@ -7,8 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.DatabaseOnListItemClickListener
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
@@ -17,7 +19,10 @@ class DatabaseAdapter(
     private val databaseOnListItemClickListener: DatabaseOnListItemClickListener
 ): RecyclerView.Adapter<DatabaseAdapter.RecyclerItemViewHolder>() {
     /** Задание переменных */ //region
+    // DataModel
     private var dataModel: MutableList<DataModel> = mutableListOf()
+    // ResourcesProviderImpl
+    private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     //endregion
 
 
@@ -57,7 +62,10 @@ class DatabaseAdapter(
 //                        meanings[0].translation?.translation
                     itemView.findViewById<ImageView>(R.id.database_main_delete_from_db)
                         .setOnClickListener {
-                        Toast.makeText(itemView.context, "Слово ${data.text} удалено",
+                        Toast.makeText(itemView.context, "${
+                            resourcesProviderImpl.getString(R.string.delete_word_info_begin)} \"${
+                                data.text}\" ${
+                            resourcesProviderImpl.getString(R.string.delete_word_info_end)}",
                             Toast.LENGTH_SHORT).show()
                         // Удаление выбранного слова из базы данных
                         databaseOnListItemClickListener.onItemClick("${data.text}")

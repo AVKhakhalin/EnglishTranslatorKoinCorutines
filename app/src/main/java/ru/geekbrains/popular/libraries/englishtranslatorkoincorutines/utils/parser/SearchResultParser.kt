@@ -53,13 +53,17 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
     return meaningsSeparatedByComma
 }
 
-fun mapHistoryEntityToSearchResult(word: String, list: List<HistoryEntity>): List<DataModel> {
+fun mapHistoryEntityToSearchResult(
+    word: String,
+    list: List<HistoryEntity>,
+    error_empty: String,
+    begin_info: String,
+    end_info: String
+): List<DataModel> {
     val searchResult = ArrayList<DataModel>()
     if (!list.isNullOrEmpty()) {
         if (word == "") {
-            searchResult.add(DataModel(
-                "Для поиска в базе данных воспользуйтесь поисковым полем. " +
-                        "\nВывести всю имеющуюся информацию можно по запросу \"*\"", null))
+            searchResult.add(DataModel(error_empty, null))
         } else {
             for (entity in list) {
                 if (word == "*") {
@@ -80,8 +84,7 @@ fun mapHistoryEntityToSearchResult(word: String, list: List<HistoryEntity>): Lis
             }
             if (searchResult.size == 0)
                 searchResult.add(DataModel(
-                "В базе данных нет слова \"$word\"." +
-                        "\nВывести всю имеющуюся информацию можно по запросу \"*\"", null))
+                "$begin_info \"$word\".$begin_info", null))
         }
     }
     return searchResult
@@ -131,8 +134,8 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
                 DataWord(
                 "${it.text}",
                 "${it.meanings?.get(0)?.translation?.translation}",
-                "https:${it.meanings?.get(0)?.previewUrl}",
-                "https:${it.meanings?.get(0)?.imageUrl}",
+                "${Constants.HTTPS_BASE}${it.meanings?.get(0)?.previewUrl}",
+                "${Constants.HTTPS_BASE}${it.meanings?.get(0)?.imageUrl}",
                 "",
                 "",
                 allMeanings)

@@ -136,7 +136,10 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                                 object: OnListItemClickListener {
                                     override fun onItemClick(data: DataWord) {
                                         Toast.makeText(this@MainActivity,
-                                            "Слово ${data.word} сохранено",
+                                            "${resources.getString(
+                                                R.string.save_word_info_begin)} \"${data.word}\" ${
+                                                    resources.getString(
+                                                R.string.save_word_info_end)}",
                                             Toast.LENGTH_SHORT).show()
                                         model.saveData(data)
                                     }
@@ -210,17 +213,10 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     if (isDatabaseShow) {
-                        // Отправка запроса непосредственно к базе данных
-                        // для отображения результата на странице фрагмента
-//                        showDatabaseFragment?.let {
-//                            it.getData(query)
-//                        }
-
                         // Начальное открытие фрагмента
                         showDatabaseFragment = ShowDatabaseFragment.newInstance(query)
                         supportFragmentManager
                             .beginTransaction()
-//                                .addToBackStack(null)
                             .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
                             .commit()
                     } else {
@@ -299,7 +295,6 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                             showDatabaseFragment = ShowDatabaseFragment.newInstance("")
                             supportFragmentManager
                                 .beginTransaction()
-//                            .addToBackStack(null)
                                 .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
                                 .commit()
                             true

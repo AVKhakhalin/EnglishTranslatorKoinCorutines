@@ -12,6 +12,7 @@ class Constants {
         const val BUTTON_CHANGE_THEME_INDEX: Int = 1
         const val ENGLISH_SYMBOLS = "[a-zA-Z]"
         const val BASE_URL_LOCATIONS = "https://dictionary.skyeng.ru/api/public/v1/"
+        const val HTTPS_BASE = "https:"
 
         // Dagger
         const val NAME_REMOTE = "Remote"
