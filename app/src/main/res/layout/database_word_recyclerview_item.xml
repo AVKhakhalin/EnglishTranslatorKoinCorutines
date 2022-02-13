@@ -36,7 +36,7 @@
                 tools:text="@string/header_textview_recycler_item_tools_text" />
 
             <TextView
-                android:id="@+id/database_description_textview_recycler_item"
+                android:id="@+id/database_translations_textview_recycler_item"
                 style="@style/BaseTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/database_translations_textview_recycler_item"
+        android:id="@+id/database_description_textview_recycler_item"
         style="@style/BaseTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

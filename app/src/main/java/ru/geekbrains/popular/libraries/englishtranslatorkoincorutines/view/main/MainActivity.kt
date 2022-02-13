@@ -43,8 +43,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     private lateinit var binding: ActivityMainBinding
     // MainAdapter
     private var adapter: MainAdapterTouch? = null
-    // Bottom navigation menu (признак основного состояния Main State - когда можно вводить слова)
-    private var isMain: Boolean = false
+    // Bottom navigation menu
+    // (признак основного состояния Main State, true - когда можно вводить слова)
+    private var isMain: Boolean = true
     // Признак темы приложения
     private var isThemeDay: Boolean = true
     // Признак отображения информации из базы данных
@@ -238,7 +239,6 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             // Событие на закрытие поискового окна (обнуление фильтра)
             searchView.setOnCloseListener {
                 // TODO
-//                Toast.makeText(this@MainActivity, "Close", Toast.LENGTH_SHORT).show()
                 true
             }
             // Получение поискового поля для ввода и редактирования текста поискового
@@ -257,14 +257,6 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 .setDuration(1500).start()
             //endregion
         } else {
-            // Закрытие поля для ввода текста
-//            val searchViewActionView: android.view.View = binding.bottomNavigationMenu.bottomAppBar
-//                .menu.findItem(R.id.action_bottom_bar_search_request_form).actionView
-//            val searchView: SearchView = searchViewActionView as SearchView
-//            searchView.onActionViewCollapsed()
-//            // Скрытие поля для ввода текста
-//            searchView.visibility = android.view.View.INVISIBLE
-
             // Анимация вращения картинки на нижней кнопке FAB
             ObjectAnimator.ofFloat(
                 binding.bottomNavigationMenu.bottomAppBarFab,

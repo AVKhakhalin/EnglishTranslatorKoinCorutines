@@ -17,5 +17,9 @@ class HistoryEntity(
     @field:ColumnInfo(name = "imageUrl")
     var imageUrl: String?,
     @field:ColumnInfo(name = "allMeanings")
-    var allMeanings: String?
+    var allMeanings: String?,
+    @field:ColumnInfo(name = "transcription")
+    var transcription: String?,
+    @field:ColumnInfo(name = "soundUrl")
+    var soundUrl: String?
 )

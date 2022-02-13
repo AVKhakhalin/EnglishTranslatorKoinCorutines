@@ -1,14 +1,21 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.media.MediaPlayer
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.sounds.playSound
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader.GlideImageLoaderImpl
 
@@ -27,8 +34,11 @@ class WordViewHolder(
     private val constraintSet: ConstraintSet = ConstraintSet()
     // CurrentDataWord
     private var currentDataWord: DataWord? = null
+    // ResourcesProviderImpl
+    private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     //endregion
 
+    @SuppressLint("SetTextI18n")
     override fun bind(dataWord: DataWord, isEnglish: Boolean) {
         if (layoutPosition != RecyclerView.NO_POSITION) {
             // Сохранение dataWord
@@ -36,19 +46,19 @@ class WordViewHolder(
             // Установка слова и его перевода
             if (isEnglish) {
                 itemView.findViewById<TextView>(R.id.main_header_textview_recycler_item).text =
-                    dataWord.word
+                    "${dataWord.word} ${dataWord.transcription}"
                 itemView.findViewById<TextView>(R.id.main_description_textview_recycler_item).text =
                     dataWord.translation
             } else {
                 itemView.findViewById<TextView>(R.id.main_header_textview_recycler_item).text =
                     dataWord.translation
                 itemView.findViewById<TextView>(R.id.main_description_textview_recycler_item).text =
-                    dataWord.word
+                    "${dataWord.word} ${dataWord.transcription}"
             }
             // Установка развёрнутого описания слова
             itemView.findViewById<TextView>(
                 R.id.main_translations_textview_recycler_item
-            ).setText(dataWord.allMeanings)
+            ).text = dataWord.allMeanings
             // Установка пиктограммы слова
             glideImageLoaderImpl.loadInto(dataWord.linkImage,
                 itemView.findViewById<ImageView>(R.id.main_word_pictogram))
@@ -67,6 +77,8 @@ class WordViewHolder(
                     mainAdapterTouch.positionOldView = adapterPosition
                     // Отображение дополнительной информации у элемента
                     showAdditionalInfoForElement(dataWord)
+                    // Озвучивание слова в элементе
+                    playSound(dataWord.linkSound, resourcesProviderImpl.context)
                 } else {
                     // Скрытие дополнительной информации у элемента
                     hideAdditionalInfoForElement()
@@ -74,6 +86,8 @@ class WordViewHolder(
                     if (mainAdapterTouch.oldView != itemView) {
                         // Отображение дополнительной информации у элемента
                         showAdditionalInfoForElement(dataWord)
+                        // Озвучивание слова в элементе
+                        playSound(dataWord.linkSound, resourcesProviderImpl.context)
                         // Сохранение текущей View
                         mainAdapterTouch.oldView = itemView
                         mainAdapterTouch.positionOldView = adapterPosition

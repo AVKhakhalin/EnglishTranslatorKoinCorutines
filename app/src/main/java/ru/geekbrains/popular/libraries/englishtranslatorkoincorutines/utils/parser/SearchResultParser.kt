@@ -32,7 +32,10 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
                 newMeanings.add(Meanings(
                     meaning.translation,
                     meaning.previewUrl,
-                    meaning.imageUrl))
+                    meaning.imageUrl,
+                    meaning.transcription,
+                    meaning.soundUrl
+                ))
             }
         }
         if (newMeanings.isNotEmpty()) {
@@ -70,21 +73,30 @@ fun mapHistoryEntityToSearchResult(
                     searchResult.add(DataModel(
                         entity.word,
                         listOf<Meanings>(Meanings(
-                            Translation("${entity.allMeanings}"),
-                            "${entity.previewUrl}", "${entity.imageUrl}"))
+                            Translation(
+                            "${entity.allMeanings}"),
+                            "${entity.previewUrl}",
+                            "${entity.imageUrl}",
+                            "${entity.transcription}",
+                            "${entity.soundUrl}"))
                     ))
                 } else if (entity.word.indexOf(word, 0) > -1) {
                     searchResult.add(DataModel(
                         entity.word,
                         listOf<Meanings>(Meanings(
-                        Translation("${entity.allMeanings}"),
-                        "${entity.previewUrl}", "${entity.imageUrl}"))
+                        Translation(
+                        "${entity.allMeanings}"),
+                        "${entity.previewUrl}",
+                        "${entity.imageUrl}",
+                        "${entity.transcription}",
+                        "${entity.soundUrl}"
+                        ))
                     ))
                 }
             }
             if (searchResult.size == 0)
                 searchResult.add(DataModel(
-                "$begin_info \"$word\".$begin_info", null))
+                "$begin_info \"$word\".$end_info", null))
         }
     }
     return searchResult
@@ -104,19 +116,36 @@ fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
                         allMeanings = "$allMeanings${meanings.translation?.translation}" +
                                 if (index < meaningsList.count() - 1) ", " else ""
                     }
+                    HistoryEntity("${searchResult[0].text}",
+                        "${meaningsList[0].translation?.translation}",
+                        convertToURI("${meaningsList[0].previewUrl}"),
+                        convertToURI("${meaningsList[0].imageUrl}"),
+                        allMeanings,
+                        convertToTranscription("${meaningsList[0].transcription}"),
+                        convertToURI("${meaningsList[0].soundUrl}")
+                    )
                 }
-                HistoryEntity("${searchResult[0].text}",
-                    "${searchResult[0].meanings!![0].translation?.translation}",
-                    "${searchResult[0].meanings!![0].previewUrl}",
-                    "${searchResult[0].meanings!![0].imageUrl}",
-                    allMeanings
-                )
             } else {
                 null
             }
         }
         else -> null
     }
+}
+
+fun convertToURI(stringData: String): String {
+    return if (stringData.indexOf(Constants.HTTPS_BASE) == -1)
+               "${Constants.HTTPS_BASE}$stringData"
+           else
+               stringData
+}
+
+fun convertToTranscription(stringData: String): String {
+    return if (stringData.isNotEmpty()) {
+                if (stringData[0].compareTo('[') == 0) stringData
+                else "[$stringData]"
+           }
+           else ""
 }
 
 fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWord> {
@@ -136,8 +165,8 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
                 "${it.meanings?.get(0)?.translation?.translation}",
                 "${Constants.HTTPS_BASE}${it.meanings?.get(0)?.previewUrl}",
                 "${Constants.HTTPS_BASE}${it.meanings?.get(0)?.imageUrl}",
-                "",
-                "",
+                convertToTranscription("${it.meanings?.get(0)?.transcription}"),
+                "${Constants.HTTPS_BASE}${it.meanings?.get(0)?.soundUrl}",
                 allMeanings)
             )
         }
@@ -150,7 +179,10 @@ fun convertDataWordToDataModel(dataWord: DataWord): MutableList<DataModel> {
     var dataModel: MutableList<DataModel> = mutableListOf()
     var meanings: MutableList<Meanings> = mutableListOf(Meanings(Translation(dataWord.translation),
                                                         dataWord.linkPictogram,
-                                                        dataWord.linkImage))
+                                                        dataWord.linkImage,
+                                                        dataWord.transcription,
+                                                        dataWord.linkSound,
+                                                        ))
     val allMeanings: List<String> = dataWord.allMeanings.split(", ")
 
     allMeanings.forEachIndexed { index, meaning ->
@@ -159,6 +191,8 @@ fun convertDataWordToDataModel(dataWord: DataWord): MutableList<DataModel> {
             meanings.add(
                 Meanings(
                     Translation(allMeanings[index]),
+                    "",
+                    "",
                     "",
                     ""
                 )

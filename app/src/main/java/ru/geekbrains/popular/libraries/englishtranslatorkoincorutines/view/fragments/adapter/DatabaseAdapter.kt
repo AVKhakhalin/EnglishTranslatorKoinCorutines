@@ -11,6 +11,7 @@ import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.sounds.playSound
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.DatabaseOnListItemClickListener
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
@@ -51,15 +52,21 @@ class DatabaseAdapter(
     inner class RecyclerItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
+                // Установка содержания элемента списка
                 itemView.findViewById<TextView>(R.id.database_header_textview_recycler_item).text =
                     data.text
                 data.meanings?.let { meanings ->
+                    // Установка события на клик по элементу списка для его озвучивания
+                    itemView.setOnClickListener {
+                        // Озвучивание слова в элементе
+                        playSound(meanings[0].soundUrl.toString(), resourcesProviderImpl.context)
+                    }
+                    itemView.findViewById<TextView>(
+                        R.id.database_translations_textview_recycler_item).text =
+                        meanings[0].transcription
                     itemView.findViewById<TextView>(
                         R.id.database_description_textview_recycler_item).text =
                         meanings[0].translation?.translation
-//                    itemView.findViewById<TextView>(
-//                        R.id.database_translations_textview_recycler_item).text =
-//                        meanings[0].translation?.translation
                     itemView.findViewById<ImageView>(R.id.database_main_delete_from_db)
                         .setOnClickListener {
                         Toast.makeText(itemView.context, "${

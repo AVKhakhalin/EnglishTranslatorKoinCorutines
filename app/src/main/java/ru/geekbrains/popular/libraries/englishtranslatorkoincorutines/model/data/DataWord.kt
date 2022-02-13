@@ -11,7 +11,7 @@ class DataWord() {
     // Ссылка на картинку с изображением значения слова
     var linkImage: String = ""
     // Ссылка на транскрипцию слова
-    var linkTranscription: String = ""
+    var transcription: String = ""
     // Ссылка на аудио-файл с произношением слова
     var linkSound: String = ""
     // Развернутое описание слова
@@ -25,7 +25,7 @@ class DataWord() {
         translation: String,
         linkPictogram: String,
         linkImage: String,
-        linkTranscription: String,
+        transcription: String,
         linkSound: String,
         allMeanings: String
     ): this() {
@@ -33,7 +33,7 @@ class DataWord() {
         this.translation = translation
         this.linkPictogram = linkPictogram
         this.linkImage = linkImage
-        this.linkTranscription = linkTranscription
+        this.transcription = transcription
         this.linkSound = linkSound
         this.allMeanings = allMeanings
     }
@@ -59,7 +59,7 @@ class DataWord() {
         if (translation != other.translation) {
             return false
         }
-        if (linkTranscription != other.linkTranscription) {
+        if (transcription != other.transcription) {
             return false
         }
         if (allMeanings != other.allMeanings) {
