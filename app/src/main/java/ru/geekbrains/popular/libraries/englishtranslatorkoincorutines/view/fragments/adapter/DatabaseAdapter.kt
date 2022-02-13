@@ -11,10 +11,7 @@ import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.sounds.playSound
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.DatabaseOnListItemClickListener
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
 
 class DatabaseAdapter(
     private val databaseOnListItemClickListener: DatabaseOnListItemClickListener
@@ -59,7 +56,8 @@ class DatabaseAdapter(
                     // Установка события на клик по элементу списка для его озвучивания
                     itemView.setOnClickListener {
                         // Озвучивание слова в элементе
-                        playSound(meanings[0].soundUrl.toString(), resourcesProviderImpl.context)
+                        databaseOnListItemClickListener.playSoundClick(
+                            meanings[0].soundUrl.toString())
                     }
                     itemView.findViewById<TextView>(
                         R.id.database_translations_textview_recycler_item).text =
@@ -71,11 +69,11 @@ class DatabaseAdapter(
                         .setOnClickListener {
                         Toast.makeText(itemView.context, "${
                             resourcesProviderImpl.getString(R.string.delete_word_info_begin)} \"${
-                                data.text}\" ${
+                            data.text}\" ${
                             resourcesProviderImpl.getString(R.string.delete_word_info_end)}",
                             Toast.LENGTH_SHORT).show()
                         // Удаление выбранного слова из базы данных
-                        databaseOnListItemClickListener.onItemClick("${data.text}")
+                        databaseOnListItemClickListener.deleteItemClick("${data.text}")
                         // Удаление выбранного слова из адаптера
                         dataModel.remove(data)
                         // Скрытие удалённого элемента в списке

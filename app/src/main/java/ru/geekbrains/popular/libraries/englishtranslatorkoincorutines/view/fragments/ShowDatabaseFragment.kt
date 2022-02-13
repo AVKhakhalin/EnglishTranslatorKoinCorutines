@@ -14,7 +14,6 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.FragmentDatabaseWordsBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.adapter.DatabaseAdapter
 
@@ -136,13 +135,18 @@ class ShowDatabaseFragment(
         _binding = null
     }
 
-    // Удаление элемента из базы данных
-    override fun onItemClick(word: String) {
+    // Удаление слова из базы данных
+    override fun deleteItemClick(word: String) {
         model.deleteDataByWord(word)
     }
 
+    // Озвучивание слова
+    override fun playSoundClick(soundUrl: String) {
+        model.playSoundWord(soundUrl)
+    }
+
+    // Получение данных из базы данных
     fun getData(word: String) {
-        // Получение данных из базы данных
         model.getData(word)
     }
 }

@@ -2,7 +2,6 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.util
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class GlideImageLoaderImpl: ImageLoader<ImageView> {
 

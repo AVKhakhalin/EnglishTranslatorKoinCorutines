@@ -2,12 +2,18 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.frag
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.sounds.playSound
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel
 
 class ShowDatabaseViewModel (
     private val interactor: ShowDatabaseInteractor
 ): BaseViewModel<AppState>() {
+    /** Задание переменных */ //region
+    private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
+    //endregion
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
 
@@ -38,6 +44,9 @@ class ShowDatabaseViewModel (
         viewModelCoroutineScope.launch {
             interactor.deleteDataByWord(word)
         }
+    }
 
+    fun playSoundWord(soundUrl: String) {
+        playSound(soundUrl, resourcesProviderImpl.context)
     }
 }

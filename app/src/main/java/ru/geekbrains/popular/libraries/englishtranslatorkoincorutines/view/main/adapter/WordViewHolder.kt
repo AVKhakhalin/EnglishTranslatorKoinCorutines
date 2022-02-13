@@ -1,13 +1,9 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.media.MediaPlayer
-import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
@@ -34,8 +30,6 @@ class WordViewHolder(
     private val constraintSet: ConstraintSet = ConstraintSet()
     // CurrentDataWord
     private var currentDataWord: DataWord? = null
-    // ResourcesProviderImpl
-    private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     //endregion
 
     @SuppressLint("SetTextI18n")
@@ -78,7 +72,7 @@ class WordViewHolder(
                     // Отображение дополнительной информации у элемента
                     showAdditionalInfoForElement(dataWord)
                     // Озвучивание слова в элементе
-                    playSound(dataWord.linkSound, resourcesProviderImpl.context)
+                    onListItemClickListener.playSoundClick(dataWord.linkSound)
                 } else {
                     // Скрытие дополнительной информации у элемента
                     hideAdditionalInfoForElement()
@@ -87,7 +81,7 @@ class WordViewHolder(
                         // Отображение дополнительной информации у элемента
                         showAdditionalInfoForElement(dataWord)
                         // Озвучивание слова в элементе
-                        playSound(dataWord.linkSound, resourcesProviderImpl.context)
+                        onListItemClickListener.playSoundClick(dataWord.linkSound)
                         // Сохранение текущей View
                         mainAdapterTouch.oldView = itemView
                         mainAdapterTouch.positionOldView = adapterPosition

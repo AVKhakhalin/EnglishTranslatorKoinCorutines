@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataWordToDataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.isEnglish
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.parseSearchResults
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.sounds.playSound
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel
 
 class MainViewModel (
@@ -21,6 +24,8 @@ class MainViewModel (
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
     // Сохранение состояния приложения
     private val liveDataSaveSettings: MutableLiveData<Settings> = MutableLiveData()
+    // ResourcesProviderImpl
+    private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     //endregion
 
     fun subscribe(): LiveData<AppState> {
@@ -60,5 +65,9 @@ class MainViewModel (
         viewModelCoroutineScope.launch {
             interactor.saveDataToDB(convertDataWordToDataModel(data), isEnglish(data.word))
         }
+    }
+
+    fun playSoundWord(soundUrl: String) {
+        playSound(soundUrl, resourcesProviderImpl.context)
     }
 }

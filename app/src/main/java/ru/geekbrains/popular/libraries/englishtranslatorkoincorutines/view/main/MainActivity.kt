@@ -1,12 +1,10 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -143,6 +141,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                                                 R.string.save_word_info_end)}",
                                             Toast.LENGTH_SHORT).show()
                                         model.saveData(data)
+                                    }
+                                    override fun playSoundClick(soundUrl: String) {
+                                        model.playSoundWord(soundUrl)
                                     }
                                 }, dataWord, isEnglish
                             )

@@ -4,4 +4,5 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
 
 interface OnListItemClickListener {
     fun onItemClick(data: DataWord)
+    fun playSoundClick(soundUrl: String)
 }

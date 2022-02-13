@@ -3,7 +3,6 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
