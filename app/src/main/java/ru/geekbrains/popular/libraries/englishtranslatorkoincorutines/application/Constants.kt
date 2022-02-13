@@ -13,6 +13,8 @@ class Constants {
         const val ENGLISH_SYMBOLS = "[a-zA-Z]"
         const val BASE_URL_LOCATIONS = "https://dictionary.skyeng.ru/api/public/v1/"
         const val HTTPS_BASE = "https:"
+        const val CACHE_FOLDER_NAME = "/Pictograms/"
+        const val CACHE_FILE_EXTENSION = ".jpg"
 
         // Dagger
         const val NAME_REMOTE = "Remote"

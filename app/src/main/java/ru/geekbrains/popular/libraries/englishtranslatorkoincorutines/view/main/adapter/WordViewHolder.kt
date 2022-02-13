@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.sounds.playSound
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.imagesave.LoadSaveGetDeletePictogramImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader.GlideImageLoaderImpl
 
@@ -30,6 +29,9 @@ class WordViewHolder(
     private val constraintSet: ConstraintSet = ConstraintSet()
     // CurrentDataWord
     private var currentDataWord: DataWord? = null
+    // LoadSaveAndGetImageImpl
+    private val loadSaveGetDeleteImageImpl:
+            LoadSaveGetDeletePictogramImpl = LoadSaveGetDeletePictogramImpl()
     //endregion
 
     @SuppressLint("SetTextI18n")
@@ -56,6 +58,10 @@ class WordViewHolder(
             // Установка пиктограммы слова
             glideImageLoaderImpl.loadInto(dataWord.linkImage,
                 itemView.findViewById<ImageView>(R.id.main_word_pictogram))
+            // Сохранение пиктограммы для самого первого слова
+            if (adapterPosition == 0) {
+                loadSaveGetDeleteImageImpl.loadAndSaveImage(dataWord.word, dataWord.linkImage)
+            }
             // Установка картинки для слова
             glideImageLoaderImpl.loadInto(
                 dataWord.linkImage,
@@ -103,6 +109,8 @@ class WordViewHolder(
     // Передача события клика на кнопку добавления данного слова в базу данных
     private fun saveWordToDatabase(dataWord: DataWord) {
         onListItemClickListener.onItemClick(dataWord)
+        // Сохранение пиктограммы для слова, передаваемого в базу данных
+        loadSaveGetDeleteImageImpl.loadAndSaveImage(dataWord.word, dataWord.linkImage)
     }
 
     //region МЕТОДЫ ДЛЯ РЕШЕНИЯ ВОПРОСА С ДУБЛИРОВАНИЕМ ОТОБРАЖЕНИЯ КАРТИНКИ В ЭЛЕМЕНТАХ (~ >10)

@@ -90,6 +90,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         setContentView(binding.root)
         // Установка View
         initViews()
+        /** Получение разрешений на запись информации */
+        model.isStoragePermissionGranted()
     }
 
     // Установка Views
@@ -112,7 +114,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         val viewModel: MainViewModel by viewModel()
         model = viewModel
         // Подписка на ViewModel
-        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+        model.subscribe(this@MainActivity).observe(
+            this@MainActivity, Observer<AppState> { renderData(it) })
     }
 
     override fun renderData(appState: AppState) {

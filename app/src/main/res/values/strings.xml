@@ -26,4 +26,6 @@
     <string name="action_show_db_title">Посмотреть сохранённое</string>
     <string name="database_buttons_relative_layout_hints">Удалить слово</string>
     <string name="main_save_to_db_hints">Сохранить</string>
+    <string name="get_permission_write_read_text">Разрешение на запись и считывание данных получено</string>
+    <string name="not_get_permission_write_read_text">Разрешение на запись и считывание данных отсутствует</string>
 </resources>

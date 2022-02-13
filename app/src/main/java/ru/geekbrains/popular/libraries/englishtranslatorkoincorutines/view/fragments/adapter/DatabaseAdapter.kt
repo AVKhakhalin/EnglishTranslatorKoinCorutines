@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.imagesave.LoadSaveGetDeletePictogramImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.DatabaseOnListItemClickListener
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader.GlideImageLoaderImpl
 
 class DatabaseAdapter(
     private val databaseOnListItemClickListener: DatabaseOnListItemClickListener
@@ -21,6 +23,11 @@ class DatabaseAdapter(
     private var dataModel: MutableList<DataModel> = mutableListOf()
     // ResourcesProviderImpl
     private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
+    // GlideImageLoaderImpl
+    private val glideImageLoaderImpl: GlideImageLoaderImpl = getKoin().get()
+    // LoadSaveAndGetImageImpl
+    private val loadSaveGetDeleteImageImpl:
+            LoadSaveGetDeletePictogramImpl = LoadSaveGetDeletePictogramImpl()
     //endregion
 
 
@@ -59,6 +66,19 @@ class DatabaseAdapter(
                         databaseOnListItemClickListener.playSoundClick(
                             meanings[0].soundUrl.toString())
                     }
+                    // Загрузка пиктограммы слова
+                    val pictogramUri: String? = loadSaveGetDeleteImageImpl.getImage(
+                        "${data.text}",
+                        "${data.meanings[0].previewUrl}"
+                    )
+                    if (pictogramUri != null) {
+                        glideImageLoaderImpl.loadInto(pictogramUri,
+                            itemView.findViewById<ImageView>(
+                                R.id.database_word_pictogram
+                            )
+                        )
+                    }
+                    // Установка перевода слова
                     itemView.findViewById<TextView>(
                         R.id.database_translations_textview_recycler_item).text =
                         meanings[0].transcription
@@ -74,6 +94,8 @@ class DatabaseAdapter(
                             Toast.LENGTH_SHORT).show()
                         // Удаление выбранного слова из базы данных
                         databaseOnListItemClickListener.deleteItemClick("${data.text}")
+                        // Удаление пиктограммы удаляемого слова из кеша программы
+                        loadSaveGetDeleteImageImpl.deleteImage("${data.text}")
                         // Удаление выбранного слова из адаптера
                         dataModel.remove(data)
                         // Скрытие удалённого элемента в списке
