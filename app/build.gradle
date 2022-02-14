@@ -1,22 +1,18 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    // Подключение плагина для работы с аннотациями (нужно для Room)
-    id 'kotlin-kapt'
-    // Подключение плагина для удобной парселизации
-    id 'kotlin-android-extensions'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+// Подключение плагина для работы с аннотациями (нужно для Room)
+apply plugin: 'kotlin-kapt'
+// Подключение плагина для удобной парселизации
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 31
-
+    compileSdkVersion Config.compile_sdk
     defaultConfig {
-        applicationId "ru.geekbrains.popular.libraries.less_1_homework"
-        minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
-
+        applicationId Config.application_id
+        minSdkVersion Config.min_sdk
+        targetSdkVersion Config.target_sdk
+        versionCode Release.version_code
+        versionName Release.version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -27,8 +23,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility Config.java_version
+        targetCompatibility Config.java_version
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -41,77 +37,80 @@ android {
 }
 
 dependencies {
+    //Modules
+    // TODO: Добавить модули
+
     //AndroidX
-    implementation libs.androidX.appcompat
+    implementation AndroidX.appcompat
     //Kotlin
-    implementation libs.kotlin.ktx
-    implementation libs.kotlin.jdk7
-    implementation libs.kotlin.coroutinescore
-    implementation libs.kotlin.coroutinesandroid
+    implementation Kotlin.ktx
+    implementation Kotlin.jdk7
+    implementation Kotlin.coroutinescore
+    implementation Kotlin.coroutinesandroid
     //Design
-    implementation libs.design.material
-    implementation libs.design.constrlayout
+    implementation Design.material
+    implementation Design.constrlayout
 /*    // Test
-    testImplementation libs.tests.junit
-    androidTestImplementation libs.tests.runner
-    androidTestImplementation libs.tests.espressocore
-    implementation fileTree(dir: libs.tests.filetreedir, include: libs.tests.filetreeinclude) */
+    testImplementation Tests.junit
+    androidTestImplementation Tests.runner
+    androidTestImplementation Tests.espressocore
+    implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude) */
     // Lifecycle
-    implementation libs.lifecycle.extensions
+    implementation Lifecycle.extensions
     // LiveData
-    implementation libs.lifecycle.ktx
+    implementation Lifecycle.ktx
     // Lifecycles only (without ViewModel or LiveData)
-    implementation libs.lifecycle.runtimektx
-    implementation libs.lifecycle.process
-    implementation libs.lifecycle.java8
+    implementation Lifecycle.runtimektx
+    implementation Lifecycle.process
+    implementation Lifecycle.java8
 /*    // Moxy
-    implementation libs.moxy.community
-    kapt libs.moxy.compiler
-    implementation libs.moxy.ktx
-    implementation libs.moxy.androidx */
+    implementation Moxy.community
+    kapt Moxy.compiler
+    implementation Moxy.ktx
+    implementation Moxy.androidx */
 /*    // Cicerony
-    implementation libs.cicerony.runtime */
+    implementation Cicerony.runtime */
     // RxJava
-    implementation libs.rxJava.android
-    implementation libs.rxJava.reactive
+    implementation RxJava.android
+    implementation RxJava.reactive
     // Glide
-    implementation libs.glide.runtime
-    kapt libs.glide.compiler
+    implementation Glide.runtime
+    kapt Glide.compiler
     // Picasso
-    implementation libs.picasso.runtime
+    implementation Picasso.runtime
 /*    // OkHTTP
-    implementation libs.okHTTP.runtime */
+    implementation OkHTTP.runtime */
     // Retrofit
-    implementation libs.retrofit.runtime
-    implementation libs.retrofit.gson
-    implementation libs.retrofit.rxJava2
-//    implementation libs.retrofit.rxJava3 // одновременно с rxJava2 не включать
-    implementation libs.retrofit.interceptor
+    implementation Retrofit.runtime
+    implementation Retrofit.gson
+    implementation Retrofit.rxJava2
+//    implementation Retrofit.rxJava3 // одновременно с rxJava2 не включать
+    implementation Retrofit.interceptor
     // Room
-    implementation libs.room.runtime
-    kapt libs.room.compiler
-    kapt libs.room.m1Support
-    implementation libs.room.rxJava3
-    implementation libs.room.ktx
+    implementation Room.runtime
+    kapt Room.compiler
+    kapt Room.m1Support
+    implementation Room.rxJava3
+    implementation Room.ktx
     // Coroutines
-    implementation libs.coroutines.android
+    implementation Coroutines.android
 /*    // Dagger
-    implementation libs.dagger.daggger
-    implementation libs.dagger.runtime
-    implementation libs.dagger.support
-    kapt libs.dagger.processor
-    kapt libs.dagger.compiler
-    kapt libs.dagger.addsupport */
+    implementation Dagger.daggger
+    implementation Dagger.runtime
+    implementation Dagger.support
+    kapt Dagger.processor
+    kapt Dagger.compiler
+    kapt Dagger.addsupport */
     // Koin
         //Koin core features
-    implementation libs.koin.core
+    implementation Koin.core
         //Koin main features for Android (Scope,ViewModel ...)
-    implementation libs.koin.android
+    implementation Koin.android
         //Koin Java Compatibility
-    implementation libs.koin.compat
+    implementation Koin.compat
         // For Retrofit 2 coroutines
-    implementation libs.koin.retrofitcoroutines
+    implementation Koin.retrofitcoroutines
         // Koin for Tests
-    testImplementation libs.koin.testsandroidx
-    testImplementation libs.koin.testsio
+    testImplementation Koin.testsandroidx
+    testImplementation Koin.testsio
 }

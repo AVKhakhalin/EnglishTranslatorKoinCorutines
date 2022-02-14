@@ -1,3 +1,5 @@
+// НЕ ИСПОЛЬЗУЕТСЯ, ПОСКОЛЬКУ ЯВЛЯЕТСЯ АЛЬТЕРНАТИВОЙ "Dependencies.kt".
+// ПРИ ИЗМЕНЕНИИ ВЕРСИИ ИЗМЕНЯТЬ ЕЕ ЗДЕСЬ ТОЖЕ
 def androidXVersion = "1.3.1"
 def kotlinKTXVersion = "1.3.2"
 def kotlinJDK7Version = "1.5.20"
