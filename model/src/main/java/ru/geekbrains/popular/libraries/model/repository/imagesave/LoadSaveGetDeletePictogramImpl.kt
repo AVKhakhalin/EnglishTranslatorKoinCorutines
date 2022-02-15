@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.imagesave
+package ru.geekbrains.popular.libraries.model.repository.imagesave
 
 import android.graphics.Bitmap
 import android.os.Environment

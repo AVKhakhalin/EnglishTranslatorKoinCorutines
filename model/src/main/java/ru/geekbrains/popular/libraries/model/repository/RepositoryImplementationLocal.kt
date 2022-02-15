@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository
+package ru.geekbrains.popular.libraries.model.repository
 
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataModel

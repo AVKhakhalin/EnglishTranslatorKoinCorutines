@@ -9,10 +9,10 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.imagesave.LoadSaveGetDeletePictogramImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader.GlideImageLoaderImpl
 import ru.geekbrains.popular.libraries.model.data.DataWord
+import ru.geekbrains.popular.libraries.model.repository.imagesave.LoadSaveGetDeletePictogramImpl
 
 class WordViewHolder(
     private val mainAdapterTouch: MainAdapterTouch,

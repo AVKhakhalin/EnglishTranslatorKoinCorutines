@@ -1,13 +1,13 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource
+package ru.geekbrains.popular.libraries.model.datasource
 
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.model.data.AppState
-import ru.geekbrains.popular.libraries.model.data.DataModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room.HistoryDao
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelSuccessToEntity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.mapHistoryEntityToSearchResult
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.model.R
+import ru.geekbrains.popular.libraries.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.room.HistoryDao
+import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 
 class RoomDataBaseImplementation(
     private val historyDao: HistoryDao

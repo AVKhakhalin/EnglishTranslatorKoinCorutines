@@ -1,11 +1,11 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.Repository
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.RepositoryLocal
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.isEnglish
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.Interactor
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.repository.Repository
+import ru.geekbrains.popular.libraries.model.repository.RepositoryLocal
 import ru.geekbrains.popular.libraries.utils.network.NetworkStatus
 
 class MainInteractor (

@@ -4,10 +4,6 @@ import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.Repository
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.RepositoryImplementation
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.RepositoryImplementationLocal
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.RepositoryLocal
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
@@ -18,6 +14,10 @@ import ru.geekbrains.popular.libraries.model.Constants
 import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.model.datasource.RetrofitImplementation
 import ru.geekbrains.popular.libraries.model.datasource.RoomDataBaseImplementation
+import ru.geekbrains.popular.libraries.model.repository.Repository
+import ru.geekbrains.popular.libraries.model.repository.RepositoryImplementation
+import ru.geekbrains.popular.libraries.model.repository.RepositoryImplementationLocal
+import ru.geekbrains.popular.libraries.model.repository.RepositoryLocal
 import ru.geekbrains.popular.libraries.model.room.HistoryDataBase
 import ru.geekbrains.popular.libraries.utils.network.NetworkStatus
 import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl

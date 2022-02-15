@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room
+package ru.geekbrains.popular.libraries.model.room
 
 import androidx.room.*
 
