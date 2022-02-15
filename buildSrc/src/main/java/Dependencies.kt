@@ -89,7 +89,7 @@ object Design {
     const val constrlayout = "androidx.constraintlayout:constraintlayout:${Versions.designConstrlayout}"
 }
 
-object Test {
+object Tests {
     const val junit = "junit:junit:${Versions.testJunit}"
     const val runner = "androidx.test:runner:${Versions.testRunner}"
     const val espressocore = "androidx.test.espresso:espresso-core:${Versions.testEspressocore}"

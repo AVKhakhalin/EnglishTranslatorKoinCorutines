@@ -20,22 +20,22 @@ dependencies {
     implementation Kotlin.jdk7
     implementation Kotlin.coroutinescore
     implementation Kotlin.coroutinesandroid
-    //Design
+/*    //Design
     implementation Design.material
-    implementation Design.constrlayout
-/*    // Test
+    implementation Design.constrlayout */
+    // Tests
     testImplementation Tests.junit
     androidTestImplementation Tests.runner
     androidTestImplementation Tests.espressocore
-    implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude) */
-    // Lifecycle
+    implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude)
+/*    // Lifecycle
     implementation Lifecycle.extensions
     // LiveData
     implementation Lifecycle.ktx
     // Lifecycles only (without ViewModel or LiveData)
     implementation Lifecycle.runtimektx
     implementation Lifecycle.process
-    implementation Lifecycle.java8
+    implementation Lifecycle.java8 */
 /*    // Moxy
     implementation Moxy.community
     kapt Moxy.compiler
@@ -43,14 +43,14 @@ dependencies {
     implementation Moxy.androidx */
 /*    // Cicerony
     implementation Cicerony.runtime */
-    // RxJava
+/*    // RxJava
     implementation RxJava.android
-    implementation RxJava.reactive
+    implementation RxJava.reactive */
     // Glide
     implementation Glide.runtime
     kapt Glide.compiler
-    // Picasso
-    implementation Picasso.runtime
+/*    // Picasso
+    implementation Picasso.runtime */
 /*    // OkHTTP
     implementation OkHTTP.runtime */
     // Retrofit
@@ -65,8 +65,8 @@ dependencies {
     kapt Room.m1Support
     implementation Room.rxJava3
     implementation Room.ktx
-    // Coroutines
-    implementation Coroutines.android
+/*    // Coroutines
+    implementation Coroutines.android */
 /*    // Dagger
     implementation Dagger.daggger
     implementation Dagger.runtime

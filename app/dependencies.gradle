@@ -52,7 +52,7 @@ ext {
     libs.design = design
     design.material = "com.google.android.material:material:$designMaterialVersion"
     design.constrlayout = "androidx.constraintlayout:constraintlayout:$designConstrlayoutVersion"
-    // Test
+    // Tests
     tests = [:]
     libs.tests = tests
     tests.junit = "junit:junit:$testJunitVersion"

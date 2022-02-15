@@ -51,11 +51,11 @@ dependencies {
     //Design
     implementation Design.material
     implementation Design.constrlayout
-/*    // Test
+    // Tests
     testImplementation Tests.junit
     androidTestImplementation Tests.runner
     androidTestImplementation Tests.espressocore
-    implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude) */
+    implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude)
     // Lifecycle
     implementation Lifecycle.extensions
     // LiveData
