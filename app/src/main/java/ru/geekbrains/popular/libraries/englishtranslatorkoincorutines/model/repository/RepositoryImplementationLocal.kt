@@ -2,7 +2,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.rep
 
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource.DataSourceLocal
+import ru.geekbrains.popular.libraries.model.datasource.DataSourceLocal
 
 class RepositoryImplementationLocal(
     private val dataSource: DataSourceLocal<List<DataModel>>

@@ -17,6 +17,7 @@ object Release {
 object Modules {
     const val app = ":app"
     const val model = ":model"
+    const val utils = ":utils"
     // TODO: Добавить новые модули
 }
 

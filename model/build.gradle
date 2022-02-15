@@ -10,6 +10,7 @@ apply plugin: 'kotlin-android-extensions'
 dependencies {
 
     //Modules
+    api project(Modules.utils)
     // TODO: Добавить модули
 
     //AndroidX

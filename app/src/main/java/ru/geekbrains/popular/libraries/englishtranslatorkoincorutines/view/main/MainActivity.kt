@@ -21,11 +21,8 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.ActivityMainBinding
-import ru.geekbrains.popular.libraries.model.data.AppState
-import ru.geekbrains.popular.libraries.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelToDataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.base.BaseActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseFragment
@@ -33,6 +30,9 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.MainAdapterTouch
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
+import ru.geekbrains.popular.libraries.model.Constants
+import ru.geekbrains.popular.libraries.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.DataWord
 
 
 class MainActivity: BaseActivity<AppState, MainInteractor>() {

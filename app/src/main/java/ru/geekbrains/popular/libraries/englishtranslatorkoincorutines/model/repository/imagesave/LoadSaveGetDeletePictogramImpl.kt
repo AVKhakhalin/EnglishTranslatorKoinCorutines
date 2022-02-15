@@ -1,17 +1,15 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.imagesave
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.network.NetworkStatus
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.model.Constants
+import ru.geekbrains.popular.libraries.utils.network.NetworkStatus
+import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
