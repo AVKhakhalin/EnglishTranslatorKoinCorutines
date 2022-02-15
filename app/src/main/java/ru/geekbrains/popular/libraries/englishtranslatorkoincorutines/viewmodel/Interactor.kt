@@ -1,6 +1,6 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.data.DataModel
 
 interface Interactor<T> {
 

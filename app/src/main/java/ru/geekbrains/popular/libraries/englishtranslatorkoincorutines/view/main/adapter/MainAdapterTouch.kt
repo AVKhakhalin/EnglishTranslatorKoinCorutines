@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
+import ru.geekbrains.popular.libraries.model.data.DataWord
 
 class MainAdapterTouch (
     private val onListItemClickListener: OnListItemClickListener,

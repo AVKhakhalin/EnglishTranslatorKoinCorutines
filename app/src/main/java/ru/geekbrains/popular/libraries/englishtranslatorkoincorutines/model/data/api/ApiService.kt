@@ -3,7 +3,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.dat
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.data.DataModel
 
 interface ApiService {
 

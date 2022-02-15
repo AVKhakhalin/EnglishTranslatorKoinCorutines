@@ -2,8 +2,8 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.dat
 
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room.HistoryDao
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelSuccessToEntity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.mapHistoryEntityToSearchResult

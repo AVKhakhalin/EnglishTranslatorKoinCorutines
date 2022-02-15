@@ -1,7 +1,7 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource.DataSourceLocal
 
 class RepositoryImplementationLocal(

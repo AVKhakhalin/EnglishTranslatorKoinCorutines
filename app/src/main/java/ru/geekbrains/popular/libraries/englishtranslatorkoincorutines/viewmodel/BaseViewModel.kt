@@ -3,7 +3,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.AppState
 
 abstract class BaseViewModel<T: AppState>(
     protected open val _mutableLiveData: MutableLiveData<T> = MutableLiveData()

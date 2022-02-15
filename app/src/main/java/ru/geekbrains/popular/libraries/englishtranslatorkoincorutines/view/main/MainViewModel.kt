@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,10 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
+import ru.geekbrains.popular.libraries.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataWordToDataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.isEnglish
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.parseSearchResults

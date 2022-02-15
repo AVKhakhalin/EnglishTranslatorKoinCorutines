@@ -7,7 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.api.ApiService
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.api.BaseInterceptor
 

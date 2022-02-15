@@ -3,7 +3,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.frag
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.sounds.playSound
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel

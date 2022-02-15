@@ -1,6 +1,6 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.AppState
 
 interface DataSourceLocal<T>: DataSource<T> {
 

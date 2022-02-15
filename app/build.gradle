@@ -38,6 +38,7 @@ android {
 
 dependencies {
     //Modules
+    implementation project(Modules.model)
     // TODO: Добавить модули
 
     //AndroidX

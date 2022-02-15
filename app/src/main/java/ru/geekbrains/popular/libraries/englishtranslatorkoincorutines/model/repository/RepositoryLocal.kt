@@ -1,6 +1,6 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.AppState
 
 interface RepositoryLocal<T>: Repository<T> {
 

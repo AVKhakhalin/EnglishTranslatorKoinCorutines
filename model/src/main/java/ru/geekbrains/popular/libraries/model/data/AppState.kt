@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data
+package ru.geekbrains.popular.libraries.model.data
 
 sealed class AppState {
 

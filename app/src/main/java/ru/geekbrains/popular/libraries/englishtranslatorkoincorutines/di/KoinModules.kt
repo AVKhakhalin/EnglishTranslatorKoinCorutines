@@ -5,7 +5,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource.RetrofitImplementation
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource.RoomDataBaseImplementation
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.Repository

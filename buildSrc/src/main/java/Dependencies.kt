@@ -2,6 +2,7 @@ import org.gradle.api.JavaVersion
 
 object Config {
     const val application_id = "ru.geekbrains.popular.libraries.less_1_homework"
+//    const val application_id = "ru.geekbrains.popular.libraries.englishtranslatorkoincorutines"
     const val compile_sdk = 31
     const val min_sdk = 21
     const val target_sdk = 31
@@ -15,6 +16,7 @@ object Release {
 
 object Modules {
     const val app = ":app"
+    const val model = ":model"
     // TODO: Добавить новые модули
 }
 

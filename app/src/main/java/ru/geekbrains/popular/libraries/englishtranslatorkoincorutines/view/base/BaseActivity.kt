@@ -1,7 +1,7 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.base
 
 import androidx.appcompat.app.AppCompatActivity
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.Interactor
 

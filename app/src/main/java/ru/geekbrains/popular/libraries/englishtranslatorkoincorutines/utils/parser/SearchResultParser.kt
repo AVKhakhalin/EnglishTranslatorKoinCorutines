@@ -3,6 +3,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.*
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.room.HistoryEntity
+import ru.geekbrains.popular.libraries.model.data.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -27,9 +28,10 @@ fun parseSearchResults(state: AppState): AppState {
 private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel>) {
     if (!dataModel.text.isNullOrBlank() && !dataModel.meanings.isNullOrEmpty()) {
         val newMeanings = arrayListOf<Meanings>()
-        for (meaning in dataModel.meanings) {
-            if (meaning.translation != null && !meaning.translation.translation.isNullOrBlank()) {
-                newMeanings.add(Meanings(
+        for (meaning in dataModel.meanings!!) {
+            if (meaning.translation != null && !meaning.translation!!.translation.isNullOrBlank()) {
+                newMeanings.add(
+                    Meanings(
                     meaning.translation,
                     meaning.previewUrl,
                     meaning.imageUrl,
@@ -70,7 +72,8 @@ fun mapHistoryEntityToSearchResult(
         } else {
             for (entity in list) {
                 if (word == "*") {
-                    searchResult.add(DataModel(
+                    searchResult.add(
+                        DataModel(
                         entity.word,
                         listOf<Meanings>(Meanings(
                             Translation(
@@ -79,9 +82,11 @@ fun mapHistoryEntityToSearchResult(
                             "${entity.imageUrl}",
                             "${entity.transcription}",
                             "${entity.soundUrl}"))
-                    ))
+                    )
+                    )
                 } else if (entity.word.indexOf(word, 0) > -1) {
-                    searchResult.add(DataModel(
+                    searchResult.add(
+                        DataModel(
                         entity.word,
                         listOf<Meanings>(Meanings(
                         Translation(
@@ -91,12 +96,15 @@ fun mapHistoryEntityToSearchResult(
                         "${entity.transcription}",
                         "${entity.soundUrl}"
                         ))
-                    ))
+                    )
+                    )
                 }
             }
             if (searchResult.size == 0)
-                searchResult.add(DataModel(
-                "$begin_info \"$word\".$end_info", null))
+                searchResult.add(
+                    DataModel(
+                "$begin_info \"$word\".$end_info", null)
+                )
         }
     }
     return searchResult
@@ -177,12 +185,15 @@ fun convertDataModelToDataWord(dataModel: List<DataModel>?): MutableList<DataWor
 
 fun convertDataWordToDataModel(dataWord: DataWord): MutableList<DataModel> {
     var dataModel: MutableList<DataModel> = mutableListOf()
-    var meanings: MutableList<Meanings> = mutableListOf(Meanings(Translation(dataWord.translation),
+    var meanings: MutableList<Meanings> = mutableListOf(
+        Meanings(
+            Translation(dataWord.translation),
                                                         dataWord.linkPictogram,
                                                         dataWord.linkImage,
                                                         dataWord.transcription,
                                                         dataWord.linkSound,
-                                                        ))
+                                                        )
+    )
     val allMeanings: List<String> = dataWord.allMeanings.split(", ")
 
     allMeanings.forEachIndexed { index, meaning ->

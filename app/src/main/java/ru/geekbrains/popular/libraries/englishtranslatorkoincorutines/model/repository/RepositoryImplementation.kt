@@ -1,6 +1,6 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource.DataSource
 
 class RepositoryImplementation(
