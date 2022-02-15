@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel
+package ru.geekbrains.popular.libraries.core.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

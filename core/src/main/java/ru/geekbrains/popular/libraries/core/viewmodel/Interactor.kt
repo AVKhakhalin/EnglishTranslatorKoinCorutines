@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel
+package ru.geekbrains.popular.libraries.core.viewmodel
 
 import ru.geekbrains.popular.libraries.model.data.DataModel
 

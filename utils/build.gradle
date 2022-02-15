@@ -45,9 +45,9 @@ dependencies {
     // RxJava
     implementation RxJava.android
     implementation RxJava.reactive
-/*    // Glide
+    // Glide
     implementation Glide.runtime
-    kapt Glide.compiler */
+    kapt Glide.compiler
 /*    // Picasso
     implementation Picasso.runtime */
 /*    // OkHTTP

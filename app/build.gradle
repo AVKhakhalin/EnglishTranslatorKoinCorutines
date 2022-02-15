@@ -39,7 +39,7 @@ android {
 dependencies {
     //Modules
     implementation project(Modules.model)
-    // TODO: Добавить модули
+    implementation project(Modules.core)
 
     //AndroidX
     implementation AndroidX.appcompat

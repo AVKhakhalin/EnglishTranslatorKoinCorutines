@@ -2,3 +2,4 @@ rootProject.name = "EnglishTranslatorKoinCorutines"
 include ':app'
 include ':model'
 include ':utils'
+include ':core'

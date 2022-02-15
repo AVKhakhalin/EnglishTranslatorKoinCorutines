@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils
+package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.themecolors
 
 import android.content.res.Resources
 import android.util.TypedValue

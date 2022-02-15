@@ -11,11 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.geekbrains.popular.libraries.core.viewmodel.BaseViewModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataWordToDataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.isEnglish
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.parseSearchResults
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.BaseViewModel
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataWord
 import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl

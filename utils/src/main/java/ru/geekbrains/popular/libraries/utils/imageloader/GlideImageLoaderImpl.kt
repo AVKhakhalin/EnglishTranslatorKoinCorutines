@@ -1,4 +1,4 @@
-package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader
+package ru.geekbrains.popular.libraries.utils.imageloader
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide

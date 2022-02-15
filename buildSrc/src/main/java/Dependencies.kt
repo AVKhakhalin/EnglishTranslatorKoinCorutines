@@ -18,6 +18,7 @@ object Modules {
     const val app = ":app"
     const val model = ":model"
     const val utils = ":utils"
+    const val core = ":core"
     // TODO: Добавить новые модули
 }
 

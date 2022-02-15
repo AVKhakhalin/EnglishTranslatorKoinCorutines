@@ -1,7 +1,7 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main
 
+import ru.geekbrains.popular.libraries.core.viewmodel.Interactor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.isEnglish
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.viewmodel.Interactor
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.model.repository.Repository

@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.DatabaseOnListItemClickListener
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader.GlideImageLoaderImpl
 import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.model.repository.imagesave.LoadSaveGetDeletePictogramImpl
+import ru.geekbrains.popular.libraries.utils.imageloader.GlideImageLoaderImpl
 import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 
 class DatabaseAdapter(
