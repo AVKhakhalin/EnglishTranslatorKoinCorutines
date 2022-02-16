@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.FragmentDatabaseWordsBinding
@@ -35,6 +35,10 @@ class ShowDatabaseFragment(
     }
     // ResourcesProviderImpl
     private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
+    // ShowDatabaseFragmentScope
+    private val showDatabaseFragmentScope = getKoin().createScope(
+        "SHOW_DATABASE_FRAGMENT_SCOPE", named("SHOW_DATABASE_FRAGMENT_SCOPE")
+    )
     //endregion
 
 
@@ -67,9 +71,9 @@ class ShowDatabaseFragment(
                 "${resourcesProviderImpl.getString(R.string.error_textview_stub)}: ${
                     resourcesProviderImpl.getString(R.string.viewmodel_error)}")
         }
-        val viewModel: ShowDatabaseViewModel by viewModel()
+        val viewModel: ShowDatabaseViewModel by showDatabaseFragmentScope.inject()
         model = viewModel
-        model.subscribe().observe(this@ShowDatabaseFragment,
+        model.subscribe().observe(viewLifecycleOwner,
             Observer<AppState> { renderData(it) })
     }
 

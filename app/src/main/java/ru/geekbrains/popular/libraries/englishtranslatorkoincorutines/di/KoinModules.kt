@@ -2,11 +2,14 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di
 
 import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.themecolors.ThemeColorsImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseFragment
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainViewModel
 import ru.geekbrains.popular.libraries.model.Constants
@@ -45,17 +48,21 @@ val application = module {
 }
 
 val mainScreen = module {
-    factory {
-        MainInteractor(
-            get(named(Constants.NAME_REMOTE)),
-            get(named(Constants.NAME_LOCAL)),
-            NetworkStatus(get())
+    scope(named("MAIN_ACTIVITY_SCOPE")) {
+        scoped {
+            MainInteractor(
+                get(named(Constants.NAME_REMOTE)),
+                get(named(Constants.NAME_LOCAL)),
+                NetworkStatus(get())
             )
+        }
+        viewModel { MainViewModel(getScope("MAIN_ACTIVITY_SCOPE").get()) }
     }
-    factory { MainViewModel(get()) }
 }
 
 val showDataBaseScreen = module {
-    factory { ShowDatabaseViewModel(get()) }
-    factory { ShowDatabaseInteractor(get(named(Constants.NAME_LOCAL)))}
+    scope(named("SHOW_DATABASE_FRAGMENT_SCOPE")) {
+        scoped { ShowDatabaseInteractor(get(named(Constants.NAME_LOCAL))) }
+        viewModel { ShowDatabaseViewModel(getScope("SHOW_DATABASE_FRAGMENT_SCOPE").get()) }
+    }
 }

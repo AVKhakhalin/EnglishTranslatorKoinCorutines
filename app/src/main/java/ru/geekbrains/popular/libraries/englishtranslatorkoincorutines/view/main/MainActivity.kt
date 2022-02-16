@@ -18,7 +18,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.scope.viewModel
+import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.core.base.BaseActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
@@ -56,6 +57,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     private var showDatabaseFragment: ShowDatabaseFragment? = null
     // Menu
     private var bottomMenu: Menu? = null
+    // MainActivityScope
+    private val mainActivityScope = getKoin().createScope(
+        "MAIN_ACTIVITY_SCOPE", named("MAIN_ACTIVITY_SCOPE"))
     //endregion
 
 
@@ -111,7 +115,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // Инициализация ViewModel
     private fun initViewModel() {
         // Начальная установка ViewModel
-        val viewModel: MainViewModel by viewModel()
+        val viewModel: MainViewModel by mainActivityScope.inject()
         model = viewModel
         // Подписка на ViewModel
         model.subscribe(this@MainActivity).observe(
