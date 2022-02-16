@@ -2,7 +2,6 @@ import org.gradle.api.JavaVersion
 
 object Config {
     const val application_id = "ru.geekbrains.popular.libraries.less_1_homework"
-//    const val application_id = "ru.geekbrains.popular.libraries.englishtranslatorkoincorutines"
     const val compile_sdk = 31
     const val min_sdk = 21
     const val target_sdk = 31
@@ -26,8 +25,8 @@ object Versions {
     //AndroidX
     const val androidX = "1.3.1"
     //Kotlin
-    const val kotlinKTX = "1.3.2"
-//    const val kotlinKTX = "1.6.0"
+//    const val kotlinKTX = "1.3.2"
+    const val kotlinKTX = "1.6.0"
     const val kotlinJDK7 = "1.5.20"
     const val kotlinCoroutinescore = "1.5.1"
     const val kotlinCoroutineandroid = "1.5.0"
@@ -121,9 +120,8 @@ object Koin {
     const val core = "io.insert-koin:koin-core:${Versions.koin}"
     //Koin main features for Android (Scope,ViewModel ...)
     const val android = "io.insert-koin:koin-android:${Versions.koin}"
-//    const val viewmodel = "org.koin:koin-android-viewmodel:2.1.6"
     //Koin Java Compatibility
-//    const val compat = "io.insert-koin:koin-android-compat:${Versions.koin}"
+    const val compat = "io.insert-koin:koin-android-compat:${Versions.koin}"
     // Koin for Retrofit 2 coroutines (needs for CoroutineCallAdapterFactory())
     const val retrofitcoroutines = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Versions.koinRetrofitcoroutines}"
     // Koin for Tests

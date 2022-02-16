@@ -84,9 +84,8 @@ ext {
     koin.core = "io.insert-koin:koin-core:$koinVersion"
         //Koin main features for Android (Scope,ViewModel ...)
     koin.android = "io.insert-koin:koin-android:$koinVersion"
-    koin.viewmodel = "io.insert-koin:koin-android-veiwmodel:$koinVersion"
         //Koin Java Compatibility
-//    koin.compat = "io.insert-koin:koin-android-compat:$koinVersion"
+    koin.compat = "io.insert-koin:koin-android-compat:$koinVersion"
         // Koin for Retrofit 2 coroutines (needs for CoroutineCallAdapterFactory())
     koin.retrofitcoroutines = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$koinRetrofitcoroutinesVersion"
         // Koin for Tests

@@ -78,9 +78,8 @@ dependencies {
     implementation Koin.core
     //Koin main features for Android (Scope,ViewModel ...)
     implementation Koin.android
-//    implementation Koin.viewmodel
     //Koin Java Compatibility
-//    implementation Koin.compat
+    implementation Koin.compat
     // For Retrofit 2 coroutines
     implementation Koin.retrofitcoroutines
     // Koin for Tests
