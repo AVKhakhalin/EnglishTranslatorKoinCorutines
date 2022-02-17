@@ -11,10 +11,13 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 class NetworkStatus(
     context: Context
 ) {
-
+    /** Исходные данные */ //region
+    // BehaviorSubject
     private val networkSubject: BehaviorSubject<Boolean> = BehaviorSubject.create()
-
-    private val connectivityManager = context.getSystemService<ConnectivityManager>()
+    // ConnectivityManager
+    private val connectivityManager: ConnectivityManager? =
+        context.getSystemService<ConnectivityManager>()
+    //endregion
 
     fun getNetworkSubject(): Observable<Boolean> {
         return networkSubject

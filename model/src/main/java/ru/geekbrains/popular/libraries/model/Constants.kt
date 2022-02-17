@@ -15,6 +15,9 @@ class Constants {
         const val HTTPS_BASE = "https:"
         const val CACHE_FOLDER_NAME = "/Pictograms/"
         const val CACHE_FILE_EXTENSION = ".jpg"
+        const val MAIN_ACTIVITY_SCOPE = "MAIN_ACTIVITY_SCOPE"
+        const val SHOW_DATABASE_FRAGMENT_SCOPE = "SHOW_DATABASE_FRAGMENT_SCOPE"
+        const val NAME_DATABASE = "HistoryDB"
 
         // Dagger
         const val NAME_REMOTE = "Remote"

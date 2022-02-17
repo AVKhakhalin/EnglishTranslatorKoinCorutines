@@ -16,10 +16,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.view.*
-import org.koin.androidx.viewmodel.scope.viewModel
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.core.base.BaseActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
@@ -34,6 +36,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.
 import ru.geekbrains.popular.libraries.model.Constants
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataWord
+import ru.geekbrains.popular.libraries.utils.view.viewById
 
 
 class MainActivity: BaseActivity<AppState, MainInteractor>() {
@@ -58,8 +61,14 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // Menu
     private var bottomMenu: Menu? = null
     // MainActivityScope
-    private val mainActivityScope = getKoin().createScope(
-        "MAIN_ACTIVITY_SCOPE", named("MAIN_ACTIVITY_SCOPE"))
+    private val mainActivityScope: Scope = getKoin().createScope(
+        Constants.MAIN_ACTIVITY_SCOPE, named(Constants.MAIN_ACTIVITY_SCOPE))
+    // BottomAppBarFab
+    private val bottomAppBarFab by viewById<FloatingActionButton>(
+        R.id.bottom_app_bar_fab, getKoin().get())
+    // MainActivityRecyclerview
+    private val mainActivityRecyclerview by viewById<RecyclerView>(
+        R.id.main_activity_recyclerview, getKoin().get())
     //endregion
 
 
@@ -68,6 +77,12 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         isDatabaseShow = !isDatabaseShow
         // Отображение окна с данными из базы данных
         showDatabaseScreen(isDatabaseShow)
+    }
+
+    override fun onDestroy() {
+        Toast.makeText(this, "MainActivity DESTROY", Toast.LENGTH_SHORT).show()
+        mainActivityScope.close()
+        super.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +122,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         // Отображение окна работы с базой данных
         showDatabaseScreen(isDatabaseShow)
         // Установка события нажатия на нижниюю FAB для открытия и закрытия поискового элемента
-        binding.bottomNavigationMenu.bottomAppBarFab.setOnClickListener {
+        bottomAppBarFab.setOnClickListener {
             switchBottomAppBar()
         }
     }
@@ -136,7 +151,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                     ).show()
                 } else {
                     if (adapter == null) {
-                        binding.mainActivityRecyclerview.layoutManager =
+                        mainActivityRecyclerview.layoutManager =
                             LinearLayoutManager(applicationContext)
                         val adapter = MainAdapterTouch(
                                 object: OnListItemClickListener {
@@ -154,9 +169,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                                     }
                                 }, dataWord, isEnglish
                             )
-                        binding.mainActivityRecyclerview.adapter = adapter
+                        mainActivityRecyclerview.adapter = adapter
                         ItemTouchHelper(ItemTouchHelperCallback(adapter))
-                            .attachToRecyclerView(binding.mainActivityRecyclerview)
+                            .attachToRecyclerView(mainActivityRecyclerview)
                         this.adapter = adapter
                     } else {
                         adapter?.let {
@@ -196,8 +211,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     private fun switchBottomAppBar() {
         if (isMain) {
             // Анимация вращения картинки на нижней кнопке FAB
-            ObjectAnimator.ofFloat(
-                binding.bottomNavigationMenu.bottomAppBarFab,
+            ObjectAnimator.ofFloat(bottomAppBarFab,
                 "rotation", 0f, -Constants.ANGLE_TO_ROTATE_BOTTOM_FAB
             ).start()
             // Изменение нижней кнопки FAB
@@ -205,7 +219,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.bottomNavigationMenu.bottomAppBar.navigationIcon = null
             binding.bottomNavigationMenu.bottomAppBar.fabAlignmentMode =
                 BottomAppBar.FAB_ALIGNMENT_MODE_END
-            binding.bottomNavigationMenu.bottomAppBarFab.setImageDrawable(
+            bottomAppBarFab.setImageDrawable(
                 ContextCompat.getDrawable(this, R.drawable.ic_back_fab)
             )
             binding.bottomNavigationMenu.bottomAppBar.replaceMenu(
@@ -224,11 +238,14 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     if (isDatabaseShow) {
                         // Начальное открытие фрагмента
-                        showDatabaseFragment = ShowDatabaseFragment.newInstance(query)
-                        supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
-                            .commit()
+                        showDatabaseFragment = ShowDatabaseFragment.newInstance()
+                        showDatabaseFragment?.let {
+                            supportFragmentManager
+                                .beginTransaction()
+                                .replace(R.id.activity_fragments_container, it)
+                                .commitNow()
+                             it.setWord(query)
+                        }
                     } else {
                         // Отправка запроса в репозиторий
                         // для отображения результата на странице MainActivity
@@ -267,8 +284,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             //endregion
         } else {
             // Анимация вращения картинки на нижней кнопке FAB
-            ObjectAnimator.ofFloat(
-                binding.bottomNavigationMenu.bottomAppBarFab,
+            ObjectAnimator.ofFloat(bottomAppBarFab,
                 "rotation", 0f, Constants.ANGLE_TO_ROTATE_BOTTOM_FAB
             ).start()
             // Изменение нижней кнопки FAB
@@ -278,7 +294,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 ContextCompat.getDrawable(this, R.drawable.ic_hamburger_menu_bottom_bar)
             binding.bottomNavigationMenu.bottomAppBar.fabAlignmentMode =
                 BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
-            binding.bottomNavigationMenu.bottomAppBarFab.setImageDrawable(
+            bottomAppBarFab.setImageDrawable(
                 ContextCompat.getDrawable(this, R.drawable.ic_plus_fab))
             // Появление меню с настройками приложения
             binding.bottomNavigationMenu.bottomAppBar
@@ -293,12 +309,13 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                     if (isDatabaseShow) {
                         // Начальное открытие фрагмента
                         if (showDatabaseFragment == null) {
-                            showDatabaseFragment = ShowDatabaseFragment.newInstance("")
-                            supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
-                                .commit()
-                            true
+                            showDatabaseFragment = ShowDatabaseFragment.newInstance()
+                            showDatabaseFragment?.let {
+                                supportFragmentManager
+                                    .beginTransaction()
+                                    .replace(R.id.activity_fragments_container, it)
+                                    .commitNow()
+                            }
                         }
                     }
                     true

@@ -6,10 +6,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.themecolors.ThemeColorsImpl
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseFragment
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseViewModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainViewModel
 import ru.geekbrains.popular.libraries.model.Constants
@@ -27,7 +25,8 @@ import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 
 val application = module {
     // Локальная база данных
-    single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
+    single { Room.databaseBuilder(get(), HistoryDataBase::class.java,
+        Constants.NAME_DATABASE).build() }
     single { get<HistoryDataBase>().historyDao()}
     single<RepositoryLocal<List<DataModel>>>(named(Constants.NAME_LOCAL)) {
         RepositoryImplementationLocal(RoomDataBaseImplementation(get()))
@@ -48,7 +47,7 @@ val application = module {
 }
 
 val mainScreen = module {
-    scope(named("MAIN_ACTIVITY_SCOPE")) {
+    scope(named(Constants.MAIN_ACTIVITY_SCOPE)) {
         scoped {
             MainInteractor(
                 get(named(Constants.NAME_REMOTE)),
@@ -56,13 +55,13 @@ val mainScreen = module {
                 NetworkStatus(get())
             )
         }
-        viewModel { MainViewModel(getScope("MAIN_ACTIVITY_SCOPE").get()) }
+        viewModel { MainViewModel(getScope(Constants.MAIN_ACTIVITY_SCOPE).get()) }
     }
 }
 
 val showDataBaseScreen = module {
-    scope(named("SHOW_DATABASE_FRAGMENT_SCOPE")) {
+    scope(named(Constants.SHOW_DATABASE_FRAGMENT_SCOPE)) {
         scoped { ShowDatabaseInteractor(get(named(Constants.NAME_LOCAL))) }
-        viewModel { ShowDatabaseViewModel(getScope("SHOW_DATABASE_FRAGMENT_SCOPE").get()) }
+        viewModel { ShowDatabaseViewModel(getScope(Constants.SHOW_DATABASE_FRAGMENT_SCOPE).get()) }
     }
 }
