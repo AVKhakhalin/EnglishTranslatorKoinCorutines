@@ -2,7 +2,7 @@
     <string name="app_name">EnglishTranslator</string>
 
     <string name="error_textview_stub">Ошибка</string>
-    <string name="empty_request_error">Для поиска в базе данных воспользуйтесь поисковым полем.\nВывести всю имеющуюся информацию можно по запросу \"*\"</string>
+    <string name="empty_request_error">Для поиска интересующего Вас слова, пожалуйста, наберите его в нижнем поле.\nВывести всю имеющуюся информацию можно по запросу \"*\"</string>
     <string name="search_info_begin">В базе данных нет слова</string>
     <string name="search_info_end">\nВывести всю имеющуюся информацию можно по запросу "*"</string>
 </resources>

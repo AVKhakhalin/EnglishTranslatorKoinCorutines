@@ -18,9 +18,7 @@ class RoomDataBaseImplementation(
 
     override suspend fun getData(word: String): List<DataModel> {
         return mapHistoryEntityToSearchResult(word, historyDao.all(),
-            "${resourcesProviderImpl.getString(
-            R.string.error_textview_stub)}: ${
-            resourcesProviderImpl.getString(R.string.empty_request_error)}",
+            resourcesProviderImpl.getString(R.string.empty_request_error),
             resourcesProviderImpl.getString(
                 R.string.search_info_begin),
             resourcesProviderImpl.getString(

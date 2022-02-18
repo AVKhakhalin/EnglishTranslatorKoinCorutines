@@ -187,11 +187,11 @@ fun convertDataWordToDataModel(dataWord: DataWord): MutableList<DataModel> {
     var meanings: MutableList<Meanings> = mutableListOf(
         Meanings(
             Translation(dataWord.translation),
-                                                        dataWord.linkPictogram,
-                                                        dataWord.linkImage,
-                                                        dataWord.transcription,
-                                                        dataWord.linkSound,
-                                                        )
+            dataWord.linkPictogram,
+            dataWord.linkImage,
+            dataWord.transcription,
+            dataWord.linkSound,
+            )
     )
     val allMeanings: List<String> = dataWord.allMeanings.split(", ")
 
