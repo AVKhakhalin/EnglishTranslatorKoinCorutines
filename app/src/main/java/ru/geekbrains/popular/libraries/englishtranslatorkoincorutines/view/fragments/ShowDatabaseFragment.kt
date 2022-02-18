@@ -43,6 +43,8 @@ class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
     private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     // ShowDatabaseFragmentScope
     lateinit var showDatabaseFragmentScope: Scope
+    // Счётчик отображений результатов запроса (для устранения дублирования запроса к абзе данных)
+    private var countShowResult: Int = 0
     //endregion
 
 
@@ -150,11 +152,6 @@ class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
         fragmentDatabaseRecyclerview.adapter = databaseAdapter
     }
 
-    // Получение данных из базы данных
-    fun setWord(word: String) {
-        getData(word)
-    }
-
     // Очистка Binding при уничтожении фрагмента
     override fun onDestroy() {
         super.onDestroy()
@@ -171,8 +168,9 @@ class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
         model.playSoundWord(soundUrl)
     }
 
-    // Получение данных из базы данных
-    fun getData(word: String) {
-        model.getData(word)
+    // Повторный запрос на получение данных после поворота экрана
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        model.getData()
+        super.onViewStateRestored(savedInstanceState)
     }
 }

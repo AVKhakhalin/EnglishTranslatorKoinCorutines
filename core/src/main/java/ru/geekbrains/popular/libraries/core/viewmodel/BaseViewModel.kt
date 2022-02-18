@@ -28,7 +28,7 @@ abstract class BaseViewModel<T: AppState>(
         viewModelCoroutineScope.coroutineContext.cancelChildren()
     }
 
-    abstract fun getData(word: String)
+    abstract fun getData()
 
     abstract fun handleError(error: Throwable)
 }

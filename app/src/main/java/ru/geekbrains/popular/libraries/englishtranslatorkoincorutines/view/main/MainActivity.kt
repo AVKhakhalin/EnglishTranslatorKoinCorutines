@@ -71,6 +71,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // MainActivityRecyclerview
     private val mainActivityRecyclerview by viewById<RecyclerView>(
         R.id.main_activity_recyclerview, getKoin().get())
+    // oldRequestedWord
+    lateinit var oldRequestedWord: String
     //endregion
 
 
@@ -99,6 +101,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         // применение темы к приложению при повторном запуске приложения
         if (savedInstanceState == null) {
             model.saveSettings(Settings(isThemeDay, isMain, isDatabaseShow))
+            model.setRequestedWord(oldRequestedWord)
         } else {
             model.loadSettings().let { settings ->
                 isThemeDay = settings.isThemeDay
@@ -115,6 +118,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         initViews()
         /** Получение разрешений на запись информации */
         model.isStoragePermissionGranted()
+        // Получение информации, если поисковый запрос не пустой
+        if (model.getRequestedWord() != "") model.getData()
     }
 
     // Установка Views
@@ -236,40 +241,36 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 .menu.findItem(R.id.action_bottom_bar_search_request_form).actionView
             val searchView: SearchView = searchViewActionView as SearchView
             // Установка ранее заданного слова
-            // TODO
+            searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+                .setText(model.getRequestedWord())
             // Событие установки поискового запроса
             searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
+                    // Сохранение введённого слова в классе Settings
+                    model.setRequestedWord(query)
+                    // Обработка введённого слова или во фрагменте, или в активити
                     if (isDatabaseShow) {
-                        // Начальное открытие фрагмента
-                        showDatabaseFragment = ShowDatabaseFragment.newInstance()
-                        showDatabaseFragment?.let {
-                            supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.activity_fragments_container, it)
-                                .commitNow()
-                            // Установка текущего слов во фрагмент
-                            it.setWord(query)
-                        }
+                        // Открытие фрагмента
+                        showFragment()
                     } else {
                         // Отправка запроса в репозиторий
                         // для отображения результата на странице MainActivity
-                        model.getData(query)
+                        model.getData()
                     }
                     return false
                 }
 
                 // Отслеживание появления каждого символа
                 override fun onQueryTextChange(newText: String): Boolean {
-                    // Отображение текущего поискового запроса
-                    // TODO
+                    // Сохранение текущего поискового запроса
+                    model.setRequestedWord(newText)
                     return false
                 }
             })
 
             // Событие на закрытие поискового окна (обнуление фильтра)
             searchView.setOnCloseListener {
-                // TODO
+                model.setRequestedWord("")
                 true
             }
             // Получение поискового поля для ввода и редактирования текста поискового
@@ -312,16 +313,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                     // Отображение окна с данными из базы данных
                     showDatabaseScreen(isDatabaseShow)
                     if (isDatabaseShow) {
-                        // Начальное открытие фрагмента
-                        if (showDatabaseFragment == null) {
-                            showDatabaseFragment = ShowDatabaseFragment.newInstance()
-                            showDatabaseFragment?.let {
-                                supportFragmentManager
-                                    .beginTransaction()
-                                    .replace(R.id.activity_fragments_container, it)
-                                    .commitNow()
-                            }
-                        }
+                        // Открытие фрагмента
+                        if (showDatabaseFragment == null) showFragment()
                     }
                     true
                 }
@@ -363,6 +356,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         }
         isDatabaseShow = sharedPreferences.getBoolean(
             Constants.SHARED_PREFERENCES_DATABASE_SCREEN, false)
+        oldRequestedWord = sharedPreferences.getString(
+            Constants.SHARED_PREFERENCES_REQUESTED_WORD, "").toString()
     }
 
     // Установка темы приложения
@@ -385,6 +380,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, !isMain)
         sharedPreferencesEditor.putBoolean(
             Constants.SHARED_PREFERENCES_DATABASE_SCREEN, isDatabaseShow)
+        sharedPreferencesEditor.putString(
+            Constants.SHARED_PREFERENCES_REQUESTED_WORD, model.getRequestedWord())
         sharedPreferencesEditor.apply()
     }
 
@@ -404,11 +401,25 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.activityFragmentsContainer.visibility = View.VISIBLE
             bottomMenu?.getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX)?.
                 setIcon(R.drawable.ic_show_database_on)
-        } else {
+            // Открытие фрагмента
+            showFragment()
+    } else {
             binding.successLinearLayout.visibility = View.VISIBLE
             binding.activityFragmentsContainer.visibility = View.INVISIBLE
             bottomMenu?.getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX)?.
                 setIcon(R.drawable.ic_show_database)
+            // Загрузка данных
+            if (model.getRequestedWord() != "") model.getData()
+        }
+    }
+
+    private fun showFragment() {
+        showDatabaseFragment = ShowDatabaseFragment.newInstance()
+        showDatabaseFragment?.let {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.activity_fragments_container, it)
+                .commitNow()
         }
     }
 }

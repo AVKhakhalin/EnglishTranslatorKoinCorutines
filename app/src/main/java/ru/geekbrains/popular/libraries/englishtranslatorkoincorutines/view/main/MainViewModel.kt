@@ -41,13 +41,15 @@ class MainViewModel (
         return liveDataForViewToObserve
     }
 
-    override fun getData(word: String) {
+    override fun getData() {
+        // Выполнение поиска запрошенного слова
         _mutableLiveData.value = AppState.Loading(null)
         cancelJob()
-        viewModelCoroutineScope.launch { startInteractor(word) }
+        viewModelCoroutineScope.launch { startInteractor(settings.requestedWord) }
     }
 
-    //Doesn't have to use withContext for Retrofit call if you use .addCallAdapterFactory(CoroutineCallAdapterFactory()). The same goes for Room
+    //Doesn't have to use withContext for Retrofit call if you use
+    // .addCallAdapterFactory(CoroutineCallAdapterFactory()). The same goes for Room
     private suspend fun startInteractor(word: String) = withContext(Dispatchers.IO) {
         _mutableLiveData.postValue(parseSearchResults(interactor.getData(word)))
     }
@@ -66,14 +68,15 @@ class MainViewModel (
         this.settings.isThemeDay = settings.isThemeDay
         this.settings.isMain = settings.isMain
         this.settings.isDatabaseShow = settings.isDatabaseShow
-        Log.d("mylogs", "Save: ${
-            this.settings.isThemeDay}, ${this.settings.isMain}, ${this.settings.isDatabaseShow}")
+        this.settings.requestedWord = settings.requestedWord
     }
     fun loadSettings(): Settings {
-        Log.d("mylogs", "Load: ${
-            this.settings.isThemeDay}, ${this.settings.isMain}, ${this.settings.isDatabaseShow}")
         return settings
     }
+    fun setRequestedWord(requestedWord: String) {
+        this.settings.requestedWord = requestedWord
+    }
+    fun getRequestedWord(): String = this.settings.requestedWord
     //endregion
 
     fun saveData(data: DataWord) {

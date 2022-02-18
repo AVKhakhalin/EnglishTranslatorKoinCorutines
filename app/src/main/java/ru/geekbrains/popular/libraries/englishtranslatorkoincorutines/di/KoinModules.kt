@@ -58,13 +58,17 @@ val mainScreen = module {
                 NetworkStatus(get())
             )
         }
-        viewModel { MainViewModel(getScope(Constants.MAIN_ACTIVITY_SCOPE).get(), get()) }
+        viewModel {
+            MainViewModel(getScope(Constants.MAIN_ACTIVITY_SCOPE).get(), get())
+        }
     }
 }
 
 val showDataBaseScreen = module {
     scope(named(Constants.SHOW_DATABASE_FRAGMENT_SCOPE)) {
         scoped { ShowDatabaseInteractor(get(named(Constants.NAME_LOCAL))) }
-        viewModel { ShowDatabaseViewModel(getScope(Constants.SHOW_DATABASE_FRAGMENT_SCOPE).get()) }
+        viewModel {
+            ShowDatabaseViewModel(getScope(Constants.SHOW_DATABASE_FRAGMENT_SCOPE).get(), get())
+        }
     }
 }
