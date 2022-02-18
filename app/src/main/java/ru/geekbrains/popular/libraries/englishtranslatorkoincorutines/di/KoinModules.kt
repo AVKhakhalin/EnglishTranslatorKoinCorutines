@@ -11,6 +11,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragm
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainViewModel
 import ru.geekbrains.popular.libraries.model.Constants
+import ru.geekbrains.popular.libraries.model.Settings.Settings
 import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.model.datasource.RetrofitImplementation
 import ru.geekbrains.popular.libraries.model.datasource.RoomDataBaseImplementation
@@ -44,6 +45,8 @@ val application = module {
     single<ThemeColorsImpl> { ThemeColorsImpl() }
     // Загрузка изображений с помощью библиотеки Glide
     single<GlideImageLoaderImpl> { GlideImageLoaderImpl() }
+    // Сохранение настроек приложения во ViewModel
+    single<Settings> { Settings() }
 }
 
 val mainScreen = module {
@@ -55,7 +58,7 @@ val mainScreen = module {
                 NetworkStatus(get())
             )
         }
-        viewModel { MainViewModel(getScope(Constants.MAIN_ACTIVITY_SCOPE).get()) }
+        viewModel { MainViewModel(getScope(Constants.MAIN_ACTIVITY_SCOPE).get(), get()) }
     }
 }
 

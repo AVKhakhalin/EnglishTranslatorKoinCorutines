@@ -36,7 +36,7 @@ class ShowDatabaseViewModel (
     }
 
     override fun onCleared() {
-        _mutableLiveData.value = AppState.Success(null, true)//Set View to original state in onStop
+        _mutableLiveData.value = AppState.Success(null, true) //Set View to original state in onStop
         super.onCleared()
     }
 

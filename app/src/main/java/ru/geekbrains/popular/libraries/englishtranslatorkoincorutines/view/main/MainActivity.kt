@@ -25,7 +25,7 @@ import org.koin.core.scope.Scope
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.core.base.BaseActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
+import ru.geekbrains.popular.libraries.model.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.ActivityMainBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelToDataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.themecolors.ThemeColorsImpl
@@ -61,7 +61,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // Menu
     private var bottomMenu: Menu? = null
     // MainActivityScope
-    private val mainActivityScope: Scope = getKoin().createScope(
+//    private val mainActivityScope: Scope = getKoin().createScope(
+//        Constants.MAIN_ACTIVITY_SCOPE, named(Constants.MAIN_ACTIVITY_SCOPE))
+    private val mainActivityScope: Scope = getKoin().getOrCreateScope(
         Constants.MAIN_ACTIVITY_SCOPE, named(Constants.MAIN_ACTIVITY_SCOPE))
     // BottomAppBarFab
     private val bottomAppBarFab by viewById<FloatingActionButton>(
@@ -80,7 +82,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     }
 
     override fun onDestroy() {
-        Toast.makeText(this, "MainActivity DESTROY", Toast.LENGTH_SHORT).show()
+        // Сохранение текущих настроек программы из ViewModel в SharedPreferences
+        saveApplicationSettings()
+        // Удаление скоупа для данной активити
         mainActivityScope.close()
         super.onDestroy()
     }
@@ -94,16 +98,16 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         // Считывание системных настроек из viewModel,
         // применение темы к приложению при повторном запуске приложения
         if (savedInstanceState == null) {
-            model.saveSettings(Settings(isThemeDay, !isMain, isDatabaseShow))
+            model.saveSettings(Settings(isThemeDay, isMain, isDatabaseShow))
         } else {
-            val settings: Settings? = model.loadSettings()
-            settings?.let {
-                isMain = settings.getIsMain()
-                isThemeDay = settings.getIsThemeDay()
+            model.loadSettings().let { settings ->
+                isThemeDay = settings.isThemeDay
+                isMain = settings.isMain
+                isThemeDay = settings.isThemeDay
             }
-            // Смена темы приложения на ранее установленную пользователем
-            changeTheme()
         }
+        // Смена темы приложения на ранее установленную пользователем
+        changeTheme()
         // Установка binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -244,7 +248,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                                 .beginTransaction()
                                 .replace(R.id.activity_fragments_container, it)
                                 .commitNow()
-                             it.setWord(query)
+                            // Установка текущего слов во фрагмент
+                            it.setWord(query)
                         }
                     } else {
                         // Отправка запроса в репозиторий
@@ -287,13 +292,13 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             ObjectAnimator.ofFloat(bottomAppBarFab,
                 "rotation", 0f, Constants.ANGLE_TO_ROTATE_BOTTOM_FAB
             ).start()
-            // Изменение нижней кнопки FAB
+            // Изменение признака отображения нижнего меню
             isMain = true
-
+            // Изменение нижней кнопки FAB
             binding.bottomNavigationMenu.bottomAppBar.navigationIcon =
                 ContextCompat.getDrawable(this, R.drawable.ic_hamburger_menu_bottom_bar)
             binding.bottomNavigationMenu.bottomAppBar.fabAlignmentMode =
-                BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+                BottomAppBar.FAB_ALIGNMENT_MODE_END
             bottomAppBarFab.setImageDrawable(
                 ContextCompat.getDrawable(this, R.drawable.ic_plus_fab))
             // Появление меню с настройками приложения
@@ -324,7 +329,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.bottomNavigationMenu.bottomAppBar.menu
                 .getItem(Constants.BUTTON_CHANGE_THEME_INDEX).setOnMenuItemClickListener {
                     isMain = false
-                    setTheme()
+                    isThemeDay = !isThemeDay
+                    setThemeAndRecreate()
                     true
                 }
 
@@ -360,8 +366,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     }
 
     // Установка темы приложения
-    private fun setTheme() {
-        isThemeDay = !isThemeDay
+    private fun setThemeAndRecreate() {
         model.saveSettings(Settings(isThemeDay, isMain, isDatabaseShow))
         recreate()
     }

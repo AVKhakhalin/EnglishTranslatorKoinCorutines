@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.core.viewmodel.BaseViewModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
+import ru.geekbrains.popular.libraries.model.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataWordToDataModel
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.isEnglish
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.parseSearchResults
@@ -22,13 +23,12 @@ import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.utils.sounds.playSound
 
 class MainViewModel (
-    private val interactor: MainInteractor
+    private val interactor: MainInteractor,
+    private val settings: Settings
 ): BaseViewModel<AppState>() {
     /** Задание переменных */ //region
     // Информация с переводом слова
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
-    // Сохранение состояния приложения
-    private val liveDataSaveSettings: MutableLiveData<Settings> = MutableLiveData()
     // ResourcesProviderImpl
     private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     // MainActivity для получения разрешений
@@ -63,10 +63,16 @@ class MainViewModel (
 
     /** Сохранение и восстановление текущих настроек приложения */ //region
     fun saveSettings(settings: Settings) {
-        liveDataSaveSettings.value = settings
+        this.settings.isThemeDay = settings.isThemeDay
+        this.settings.isMain = settings.isMain
+        this.settings.isDatabaseShow = settings.isDatabaseShow
+        Log.d("mylogs", "Save: ${
+            this.settings.isThemeDay}, ${this.settings.isMain}, ${this.settings.isDatabaseShow}")
     }
-    fun loadSettings(): Settings? {
-        return liveDataSaveSettings.value
+    fun loadSettings(): Settings {
+        Log.d("mylogs", "Load: ${
+            this.settings.isThemeDay}, ${this.settings.isMain}, ${this.settings.isDatabaseShow}")
+        return settings
     }
     //endregion
 
