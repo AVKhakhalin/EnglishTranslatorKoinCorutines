@@ -23,7 +23,7 @@ dependencies {
     implementation Design.constrlayout */
     // Tests
     testImplementation Tests.junit
-    androidTestImplementation Tests.runner
+    androidTestImplementation Tests.ext
     androidTestImplementation Tests.espressocore
     implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude)
     // Lifecycle
