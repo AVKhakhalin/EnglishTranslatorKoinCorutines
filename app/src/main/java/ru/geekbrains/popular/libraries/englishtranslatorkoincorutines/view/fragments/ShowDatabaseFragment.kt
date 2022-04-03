@@ -22,6 +22,7 @@ import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.utils.view.viewById
 
+
 class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
     /** Задание переменных */ //region
     // Binding
@@ -43,10 +44,7 @@ class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
     private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
     // ShowDatabaseFragmentScope
     lateinit var showDatabaseFragmentScope: Scope
-    // Счётчик отображений результатов запроса (для устранения дублирования запроса к абзе данных)
-    private var countShowResult: Int = 0
     //endregion
-
 
     companion object {
         fun newInstance(): ShowDatabaseFragment = ShowDatabaseFragment()
@@ -78,7 +76,6 @@ class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Инициализация ShowDatabaseViewModel
         initViewModel()
         // Инициализация адаптера
@@ -93,8 +90,7 @@ class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
         }
         val viewModel: ShowDatabaseViewModel by showDatabaseFragmentScope.inject()
         model = viewModel
-        model.subscribe().observe(viewLifecycleOwner,
-            Observer<AppState> { renderData(it) })
+        model.subscribe().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
     }
 
     private fun renderData(appState: AppState) {

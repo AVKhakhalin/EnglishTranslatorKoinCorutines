@@ -34,6 +34,16 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    // Добавление общей информации для всех тестов
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/sharedTestData/java"
+        }
+        test {
+            java.srcDirs += "src/sharedTestData/java"
+        }
+    }
 }
 
 dependencies {
@@ -52,10 +62,33 @@ dependencies {
     implementation Design.material
     implementation Design.constrlayout
     // Tests
+        // Core
     testImplementation Tests.junit
-    androidTestImplementation Tests.runner
+    androidTestImplementation Tests.ext // Нужно для работы AndroidJUnit4 в инструментальных-тестах
     androidTestImplementation Tests.espressocore
     implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude)
+        // Mockito
+    testImplementation Tests.mockitocore
+    testImplementation Tests.mockitoinline
+    testImplementation (Tests.mockitokotlin) {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.mockito'
+    }
+        // Robolectric
+    testImplementation Tests.robolectric
+    testImplementation Tests.robolectriccore
+    testImplementation Tests.robolectricrunner
+    testImplementation Tests.ext // Нужно для работы AndroidJUnit4 в Unit-тестах
+    testImplementation Tests.robolectrictruth
+    testImplementation Tests.robolectricespressocore
+    testImplementation Tests.robolectricespressointents
+        // UI Automator
+    androidTestImplementation Tests.uiautomator
+    androidTestImplementation Tests.uiautomatorrules
+        // Fragment
+    debugImplementation Tests.fragment
+        // RecyclerView
+    debugImplementation Tests.recyclerView
     // Lifecycle
     implementation Lifecycle.extensions
     // LiveData

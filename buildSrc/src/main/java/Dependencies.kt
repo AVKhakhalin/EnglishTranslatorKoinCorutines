@@ -32,9 +32,25 @@ object Versions {
     const val designMaterial = "1.4.0"
     const val designConstrlayout = "2.1.1"
     // Test
-    const val testJunit = "4.12"
-    const val testRunner = "1.2.0"
-    const val testEspressocore = "3.2.0"
+        // Core
+    const val testJunit = "4.13.2"
+    const val testExt = "1.1.2"
+    const val testEspressocore = "3.3.0"
+        // Mockito
+    const val testMockitoCore = "3.3.3"
+    const val testMockitoInline = "2.8.9"
+    const val testMockitoKotlin = "1.5.0"
+        // Robolectric
+    const val testRobolectric = "4.5.1"
+    const val testRobolectricCore = "1.4.0"
+    const val testRobolectricEspresso = "3.3.0"
+        // UI Automator
+    const val testUIAutomator = "2.2.0"
+    const val testUIAutomatorrules = "1.4.0-alpha05"
+        // Fragment
+    const val testFragment = "1.4.1"
+        // RecyclerView
+    const val testRecyclerView = "3.4.0"
     // Room
     const val room = "2.4.0"
     const val roomJDBC = "3.34.0"
@@ -89,11 +105,32 @@ object Design {
 }
 
 object Tests {
+    // Core
     const val junit = "junit:junit:${Versions.testJunit}"
-    const val runner = "androidx.test:runner:${Versions.testRunner}"
+    const val ext = "androidx.test.ext:junit:${Versions.testExt}"
     const val espressocore = "androidx.test.espresso:espresso-core:${Versions.testEspressocore}"
     const val filetreedir = "'libs'"
     const val filetreeinclude = "'*.jar'"
+    // Mockito
+    const val mockitocore = "org.mockito:mockito-core:${Versions.testMockitoCore}"
+    const val mockitoinline = "org.mockito:mockito-inline:${Versions.testMockitoInline}"
+    const val mockitokotlin = "com.nhaarman:mockito-kotlin:${Versions.testMockitoKotlin}"
+    // Robolectric
+    const val robolectric = "org.robolectric:robolectric:${Versions.testRobolectric}"
+    const val robolectriccore = "androidx.test:core:${Versions.testRobolectricCore}"
+    const val robolectricrunner = "androidx.test:runner:${Versions.testRobolectricCore}"
+    const val robolectrictruth = "androidx.test.ext:truth:${Versions.testRobolectricCore}"
+    const val robolectricespressocore =
+    "androidx.test.espresso:espresso-core:${Versions.testRobolectricEspresso}"
+    const val robolectricespressointents =
+    "androidx.test.espresso:espresso-intents:${Versions.testRobolectricEspresso}"
+    // UI Automator
+    const val uiautomator = "androidx.test.uiautomator:uiautomator:${Versions.testUIAutomator}"
+    const val uiautomatorrules = "androidx.test:rules:${Versions.testUIAutomatorrules}"
+    // Fragment
+    const val fragment = "androidx.fragment:fragment-testing:${Versions.testFragment}"
+    // RecyclerView
+    const val recyclerView = "androidx.test.espresso:espresso-contrib:${Versions.testRecyclerView}"
 }
 
 object Room {

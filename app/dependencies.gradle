@@ -7,9 +7,19 @@ def kotlinCoroutinescoreVersion = "1.5.1"
 def kotlinCoroutineandroidVersion = "1.5.0"
 def designMaterialVersion = "1.4.0"
 def designConstrlayoutVersion = "2.1.1"
-def testJunitVersion = "4.12"
-def testRunnerVersion = "1.2.0"
-def testEspressocoreVersion = "3.2.0"
+def testJunitVersion = "4.13.2"
+def testExtVersion = "1.1.2"
+def testEspressocoreVersion = "3.3.0"
+def testMockitoCoreVersion = "3.3.3"
+def testMockitoInlineVersion = "2.8.9"
+def testMockitoKotlinVersion = "1.5.0"
+def testRobolectricVersion = "4.5.1"
+def testRobolectricCoreVersion = "1.4.0"
+def testRobolectricEspressoVersion = "3.3.0"
+def testUIAutomatorVersion = "2.2.0"
+def testUIAutomatorrulesVersion = "1.4.0-alpha05"
+def testFragmentVersion = "1.4.1"
+def testRecyclerViewVersion = "3.4.0"
 def roomVersion = "2.4.0"
 def roomJDBCVersion = "3.34.0"
 def daggerVersion = "2.39.1"
@@ -52,14 +62,36 @@ ext {
     libs.design = design
     design.material = "com.google.android.material:material:$designMaterialVersion"
     design.constrlayout = "androidx.constraintlayout:constraintlayout:$designConstrlayoutVersion"
-    // Tests
+    // Test
     tests = [:]
     libs.tests = tests
+    // Core
     tests.junit = "junit:junit:$testJunitVersion"
-    tests.runner = "androidx.test:runner:$testRunnerVersion"
+    tests.ext = "androidx.test.ext:junit:$testExtVersion"
     tests.espressocore = "androidx.test.espresso:espresso-core:$testEspressocoreVersion"
     tests.filetreedir = "'libs'"
     tests.filetreeinclude = "'*.jar'"
+    // Mockito
+    tests.mockitocore = "org.mockito:mockito-core:$testMockitoCoreVersion"
+    tests.mockitoinline = "org.mockito:mockito-inline:$testMockitoInlineVersion"
+    tests.mockitokotlin = "com.nhaarman:mockito-kotlin:$testMockitoKotlinVersion"
+    // Robolectric
+    tests.robolectric = "org.robolectric:robolectric:$testRobolectricVersion"
+    tests.robolectriccore = "androidx.test:core:$testRobolectricCoreVersion"
+    tests.robolectricrunner = "androidx.test:runner:$testRobolectricCoreVersion"
+    tests.robolectrictruth = "androidx.test.ext:truth:$testRobolectricCoreVersion"
+    tests.robolectricespressocore =
+            "androidx.test.espresso:espresso-core:$testRobolectricEspressoVersion"
+    tests.robolectricespressointents =
+            "androidx.test.espresso:espresso-intents:$testRobolectricEspressoVersion"
+    //UI Automator
+    tests.uiautomator = "androidx.test.uiautomator:uiautomator:$testUIAutomatorVersion"
+    tests.uiautomatorrules = "androidx.test:rules:$testUIAutomatorrulesVersion"
+    // Fragment
+//    tests.fragment = "androidx.fragment:fragment-testing:$testFragmentVersion"
+    // RecyclerView
+//    tests.recyclerView = "androidx.test.espresso:espresso-contrib:$testRecyclerViewVersion"
+
     // Room
     room = [:]
     libs.room = room
