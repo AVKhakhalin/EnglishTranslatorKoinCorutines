@@ -20,19 +20,19 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.geekbrains.popular.libraries.core.base.BaseActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Constants
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.ActivityMainBinding
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelToDataWord
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.base.BaseActivity
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.themecolors.ThemeColorsImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.ShowDatabaseFragment
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.ItemTouchHelperCallback
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.MainAdapterTouch
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.adapter.OnListItemClickListener
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
+import ru.geekbrains.popular.libraries.model.Constants
+import ru.geekbrains.popular.libraries.model.data.AppState
+import ru.geekbrains.popular.libraries.model.data.DataWord
 
 
 class MainActivity: BaseActivity<AppState, MainInteractor>() {
@@ -166,7 +166,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 if (appState.progress != null) {
                     binding.progressBarHorizontal.visibility = VISIBLE
                     binding.progressBarRound.visibility = GONE
-                    binding.progressBarHorizontal.progress = appState.progress
+                    binding.progressBarHorizontal.progress =
+                        if (appState.progress == null) 0 else appState.progress!!
                 } else {
                     binding.progressBarHorizontal.visibility = GONE
                     binding.progressBarRound.visibility = VISIBLE

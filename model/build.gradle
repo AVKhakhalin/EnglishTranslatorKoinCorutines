@@ -1,0 +1,90 @@
+// Важно поставить 'com.android.library' (для модуля library),
+// а не 'com.android.application' (для app)
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+// Подключение плагина для работы с аннотациями (нужно для Room)
+apply plugin: 'kotlin-kapt'
+// Подключение плагина для удобной парселизации
+apply plugin: 'kotlin-android-extensions'
+
+dependencies {
+
+    //Modules
+    api project(Modules.utils)
+    // TODO: Добавить модули
+
+    //AndroidX
+    implementation AndroidX.appcompat
+    //Kotlin
+    implementation Kotlin.ktx
+    implementation Kotlin.jdk7
+    implementation Kotlin.coroutinescore
+    implementation Kotlin.coroutinesandroid
+/*    //Design
+    implementation Design.material
+    implementation Design.constrlayout */
+    // Tests
+    testImplementation Tests.junit
+    androidTestImplementation Tests.runner
+    androidTestImplementation Tests.espressocore
+    implementation fileTree(dir: Tests.filetreedir, include: Tests.filetreeinclude)
+/*    // Lifecycle
+    implementation Lifecycle.extensions
+    // LiveData
+    implementation Lifecycle.ktx
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation Lifecycle.runtimektx
+    implementation Lifecycle.process
+    implementation Lifecycle.java8 */
+/*    // Moxy
+    implementation Moxy.community
+    kapt Moxy.compiler
+    implementation Moxy.ktx
+    implementation Moxy.androidx */
+/*    // Cicerony
+    implementation Cicerony.runtime */
+/*    // RxJava
+    implementation RxJava.android
+    implementation RxJava.reactive */
+    // Glide
+    implementation Glide.runtime
+    kapt Glide.compiler
+/*    // Picasso
+    implementation Picasso.runtime */
+/*    // OkHTTP
+    implementation OkHTTP.runtime */
+    // Retrofit
+    implementation Retrofit.runtime
+    implementation Retrofit.gson
+    implementation Retrofit.rxJava2
+//    implementation Retrofit.rxJava3 // одновременно с rxJava2 не включать
+    implementation Retrofit.interceptor
+    // Room
+    implementation Room.runtime
+    kapt Room.compiler
+    kapt Room.m1Support
+    implementation Room.rxJava3
+    implementation Room.ktx
+/*    // Coroutines
+    implementation Coroutines.android */
+/*    // Dagger
+    implementation Dagger.daggger
+    implementation Dagger.runtime
+    implementation Dagger.support
+    kapt Dagger.processor
+    kapt Dagger.compiler
+    kapt Dagger.addsupport */
+    // Koin
+    //Koin core features
+    implementation Koin.core
+    //Koin main features for Android (Scope,ViewModel ...)
+    implementation Koin.android
+    //Koin Java Compatibility
+    implementation Koin.compat
+    // For Retrofit 2 coroutines
+    implementation Koin.retrofitcoroutines
+    // Koin for Tests
+    testImplementation Koin.testsandroidx
+    testImplementation Koin.testsio
+}
+

@@ -9,11 +9,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.repository.imagesave.LoadSaveGetDeletePictogramImpl
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.resources.ResourcesProviderImpl
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.DatabaseOnListItemClickListener
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.imageloader.GlideImageLoaderImpl
+import ru.geekbrains.popular.libraries.model.data.DataModel
+import ru.geekbrains.popular.libraries.model.repository.imagesave.LoadSaveGetDeletePictogramImpl
+import ru.geekbrains.popular.libraries.utils.imageloader.GlideImageLoaderImpl
+import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 
 class DatabaseAdapter(
     private val databaseOnListItemClickListener: DatabaseOnListItemClickListener
@@ -67,16 +67,18 @@ class DatabaseAdapter(
                             meanings[0].soundUrl.toString())
                     }
                     // Загрузка пиктограммы слова
-                    val pictogramUri: String? = loadSaveGetDeleteImageImpl.getImage(
-                        "${data.text}",
-                        "${data.meanings[0].previewUrl}"
-                    )
-                    if (pictogramUri != null) {
-                        glideImageLoaderImpl.loadInto(pictogramUri,
-                            itemView.findViewById<ImageView>(
-                                R.id.database_word_pictogram
-                            )
+                    data.meanings?.let{
+                        val pictogramUri: String? = loadSaveGetDeleteImageImpl.getImage(
+                            "${data.text}",
+                            "${it[0].previewUrl}"
                         )
+                        if (pictogramUri != null) {
+                            glideImageLoaderImpl.loadInto(pictogramUri,
+                                itemView.findViewById<ImageView>(
+                                    R.id.database_word_pictogram
+                                )
+                            )
+                        }
                     }
                     // Установка перевода слова
                     itemView.findViewById<TextView>(
