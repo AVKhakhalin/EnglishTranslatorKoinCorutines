@@ -1,0 +1,5 @@
+<resources>
+    <string name="error_textview_stub">Ошибка</string>
+    <string name="view_not_exist_error">Нельзя получить Вью, она уже не существует</string>
+    <string name="view_not_found_error">Не найдена Вью с ID</string>
+</resources>

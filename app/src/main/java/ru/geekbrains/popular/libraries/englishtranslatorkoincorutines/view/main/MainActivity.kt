@@ -16,13 +16,16 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.core.base.BaseActivity
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application.Settings.Settings
+import ru.geekbrains.popular.libraries.model.Settings.Settings
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.ActivityMainBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.convertDataModelToDataWord
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.themecolors.ThemeColorsImpl
@@ -33,6 +36,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.
 import ru.geekbrains.popular.libraries.model.Constants
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataWord
+import ru.geekbrains.popular.libraries.utils.view.viewById
 
 
 class MainActivity: BaseActivity<AppState, MainInteractor>() {
@@ -56,6 +60,19 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     private var showDatabaseFragment: ShowDatabaseFragment? = null
     // Menu
     private var bottomMenu: Menu? = null
+    // MainActivityScope
+//    private val mainActivityScope: Scope = getKoin().createScope(
+//        Constants.MAIN_ACTIVITY_SCOPE, named(Constants.MAIN_ACTIVITY_SCOPE))
+    private val mainActivityScope: Scope = getKoin().getOrCreateScope(
+        Constants.MAIN_ACTIVITY_SCOPE, named(Constants.MAIN_ACTIVITY_SCOPE))
+    // BottomAppBarFab
+    private val bottomAppBarFab by viewById<FloatingActionButton>(
+        R.id.bottom_app_bar_fab, getKoin().get())
+    // MainActivityRecyclerview
+    private val mainActivityRecyclerview by viewById<RecyclerView>(
+        R.id.main_activity_recyclerview, getKoin().get())
+    // oldRequestedWord
+    lateinit var oldRequestedWord: String
     //endregion
 
 
@@ -64,6 +81,14 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         isDatabaseShow = !isDatabaseShow
         // Отображение окна с данными из базы данных
         showDatabaseScreen(isDatabaseShow)
+    }
+
+    override fun onDestroy() {
+        // Сохранение текущих настроек программы из ViewModel в SharedPreferences
+        saveApplicationSettings()
+        // Удаление скоупа для данной активити
+        mainActivityScope.close()
+        super.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,16 +100,17 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         // Считывание системных настроек из viewModel,
         // применение темы к приложению при повторном запуске приложения
         if (savedInstanceState == null) {
-            model.saveSettings(Settings(isThemeDay, !isMain, isDatabaseShow))
+            model.saveSettings(Settings(isThemeDay, isMain, isDatabaseShow))
+            model.setRequestedWord(oldRequestedWord)
         } else {
-            val settings: Settings? = model.loadSettings()
-            settings?.let {
-                isMain = settings.getIsMain()
-                isThemeDay = settings.getIsThemeDay()
+            model.loadSettings().let { settings ->
+                isThemeDay = settings.isThemeDay
+                isMain = settings.isMain
+                isThemeDay = settings.isThemeDay
             }
-            // Смена темы приложения на ранее установленную пользователем
-            changeTheme()
         }
+        // Смена темы приложения на ранее установленную пользователем
+        changeTheme()
         // Установка binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -92,6 +118,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         initViews()
         /** Получение разрешений на запись информации */
         model.isStoragePermissionGranted()
+        // Получение информации, если поисковый запрос не пустой
+        if (model.getRequestedWord() != "") model.getData()
     }
 
     // Установка Views
@@ -103,7 +131,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         // Отображение окна работы с базой данных
         showDatabaseScreen(isDatabaseShow)
         // Установка события нажатия на нижниюю FAB для открытия и закрытия поискового элемента
-        binding.bottomNavigationMenu.bottomAppBarFab.setOnClickListener {
+        bottomAppBarFab.setOnClickListener {
             switchBottomAppBar()
         }
     }
@@ -111,7 +139,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     // Инициализация ViewModel
     private fun initViewModel() {
         // Начальная установка ViewModel
-        val viewModel: MainViewModel by viewModel()
+        val viewModel: MainViewModel by mainActivityScope.inject()
         model = viewModel
         // Подписка на ViewModel
         model.subscribe(this@MainActivity).observe(
@@ -132,7 +160,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                     ).show()
                 } else {
                     if (adapter == null) {
-                        binding.mainActivityRecyclerview.layoutManager =
+                        mainActivityRecyclerview.layoutManager =
                             LinearLayoutManager(applicationContext)
                         val adapter = MainAdapterTouch(
                                 object: OnListItemClickListener {
@@ -150,9 +178,9 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                                     }
                                 }, dataWord, isEnglish
                             )
-                        binding.mainActivityRecyclerview.adapter = adapter
+                        mainActivityRecyclerview.adapter = adapter
                         ItemTouchHelper(ItemTouchHelperCallback(adapter))
-                            .attachToRecyclerView(binding.mainActivityRecyclerview)
+                            .attachToRecyclerView(mainActivityRecyclerview)
                         this.adapter = adapter
                     } else {
                         adapter?.let {
@@ -192,8 +220,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
     private fun switchBottomAppBar() {
         if (isMain) {
             // Анимация вращения картинки на нижней кнопке FAB
-            ObjectAnimator.ofFloat(
-                binding.bottomNavigationMenu.bottomAppBarFab,
+            ObjectAnimator.ofFloat(bottomAppBarFab,
                 "rotation", 0f, -Constants.ANGLE_TO_ROTATE_BOTTOM_FAB
             ).start()
             // Изменение нижней кнопки FAB
@@ -201,7 +228,7 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.bottomNavigationMenu.bottomAppBar.navigationIcon = null
             binding.bottomNavigationMenu.bottomAppBar.fabAlignmentMode =
                 BottomAppBar.FAB_ALIGNMENT_MODE_END
-            binding.bottomNavigationMenu.bottomAppBarFab.setImageDrawable(
+            bottomAppBarFab.setImageDrawable(
                 ContextCompat.getDrawable(this, R.drawable.ic_back_fab)
             )
             binding.bottomNavigationMenu.bottomAppBar.replaceMenu(
@@ -214,36 +241,36 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                 .menu.findItem(R.id.action_bottom_bar_search_request_form).actionView
             val searchView: SearchView = searchViewActionView as SearchView
             // Установка ранее заданного слова
-            // TODO
+            searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+                .setText(model.getRequestedWord())
             // Событие установки поискового запроса
             searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
+                    // Сохранение введённого слова в классе Settings
+                    model.setRequestedWord(query)
+                    // Обработка введённого слова или во фрагменте, или в активити
                     if (isDatabaseShow) {
-                        // Начальное открытие фрагмента
-                        showDatabaseFragment = ShowDatabaseFragment.newInstance(query)
-                        supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
-                            .commit()
+                        // Открытие фрагмента
+                        showFragment()
                     } else {
                         // Отправка запроса в репозиторий
                         // для отображения результата на странице MainActivity
-                        model.getData(query)
+                        model.getData()
                     }
                     return false
                 }
 
                 // Отслеживание появления каждого символа
                 override fun onQueryTextChange(newText: String): Boolean {
-                    // Отображение текущего поискового запроса
-                    // TODO
+                    // Сохранение текущего поискового запроса
+                    model.setRequestedWord(newText)
                     return false
                 }
             })
 
             // Событие на закрытие поискового окна (обнуление фильтра)
             searchView.setOnCloseListener {
-                // TODO
+                model.setRequestedWord("")
                 true
             }
             // Получение поискового поля для ввода и редактирования текста поискового
@@ -263,18 +290,17 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             //endregion
         } else {
             // Анимация вращения картинки на нижней кнопке FAB
-            ObjectAnimator.ofFloat(
-                binding.bottomNavigationMenu.bottomAppBarFab,
+            ObjectAnimator.ofFloat(bottomAppBarFab,
                 "rotation", 0f, Constants.ANGLE_TO_ROTATE_BOTTOM_FAB
             ).start()
-            // Изменение нижней кнопки FAB
+            // Изменение признака отображения нижнего меню
             isMain = true
-
+            // Изменение нижней кнопки FAB
             binding.bottomNavigationMenu.bottomAppBar.navigationIcon =
                 ContextCompat.getDrawable(this, R.drawable.ic_hamburger_menu_bottom_bar)
             binding.bottomNavigationMenu.bottomAppBar.fabAlignmentMode =
-                BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
-            binding.bottomNavigationMenu.bottomAppBarFab.setImageDrawable(
+                BottomAppBar.FAB_ALIGNMENT_MODE_END
+            bottomAppBarFab.setImageDrawable(
                 ContextCompat.getDrawable(this, R.drawable.ic_plus_fab))
             // Появление меню с настройками приложения
             binding.bottomNavigationMenu.bottomAppBar
@@ -287,15 +313,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
                     // Отображение окна с данными из базы данных
                     showDatabaseScreen(isDatabaseShow)
                     if (isDatabaseShow) {
-                        // Начальное открытие фрагмента
-                        if (showDatabaseFragment == null) {
-                            showDatabaseFragment = ShowDatabaseFragment.newInstance("")
-                            supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.activity_fragments_container, showDatabaseFragment!!)
-                                .commit()
-                            true
-                        }
+                        // Открытие фрагмента
+                        if (showDatabaseFragment == null) showFragment()
                     }
                     true
                 }
@@ -303,7 +322,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.bottomNavigationMenu.bottomAppBar.menu
                 .getItem(Constants.BUTTON_CHANGE_THEME_INDEX).setOnMenuItemClickListener {
                     isMain = false
-                    setTheme()
+                    isThemeDay = !isThemeDay
+                    setThemeAndRecreate()
                     true
                 }
 
@@ -336,11 +356,12 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         }
         isDatabaseShow = sharedPreferences.getBoolean(
             Constants.SHARED_PREFERENCES_DATABASE_SCREEN, false)
+        oldRequestedWord = sharedPreferences.getString(
+            Constants.SHARED_PREFERENCES_REQUESTED_WORD, "").toString()
     }
 
     // Установка темы приложения
-    private fun setTheme() {
-        isThemeDay = !isThemeDay
+    private fun setThemeAndRecreate() {
         model.saveSettings(Settings(isThemeDay, isMain, isDatabaseShow))
         recreate()
     }
@@ -359,6 +380,8 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
         sharedPreferencesEditor.putBoolean(Constants.SHARED_PREFERENCES_MAIN_STATE_KEY, !isMain)
         sharedPreferencesEditor.putBoolean(
             Constants.SHARED_PREFERENCES_DATABASE_SCREEN, isDatabaseShow)
+        sharedPreferencesEditor.putString(
+            Constants.SHARED_PREFERENCES_REQUESTED_WORD, model.getRequestedWord())
         sharedPreferencesEditor.apply()
     }
 
@@ -378,11 +401,25 @@ class MainActivity: BaseActivity<AppState, MainInteractor>() {
             binding.activityFragmentsContainer.visibility = View.VISIBLE
             bottomMenu?.getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX)?.
                 setIcon(R.drawable.ic_show_database_on)
-        } else {
+            // Открытие фрагмента
+            showFragment()
+    } else {
             binding.successLinearLayout.visibility = View.VISIBLE
             binding.activityFragmentsContainer.visibility = View.INVISIBLE
             bottomMenu?.getItem(Constants.BUTTON_LOAD_FROM_DB_INDEX)?.
                 setIcon(R.drawable.ic_show_database)
+            // Загрузка данных
+            if (model.getRequestedWord() != "") model.getData()
+        }
+    }
+
+    private fun showFragment() {
+        showDatabaseFragment = ShowDatabaseFragment.newInstance()
+        showDatabaseFragment?.let {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.activity_fragments_container, it)
+                .commitNow()
         }
     }
 }

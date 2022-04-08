@@ -1,5 +1,6 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,18 +9,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.recyclerview.widget.RecyclerView
+import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.R
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.databinding.FragmentDatabaseWordsBinding
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragments.adapter.DatabaseAdapter
+import ru.geekbrains.popular.libraries.model.Constants
 import ru.geekbrains.popular.libraries.model.data.AppState
 import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
+import ru.geekbrains.popular.libraries.utils.view.viewById
 
-class ShowDatabaseFragment(
-    private val word: String
-): Fragment(), DatabaseOnListItemClickListener {
+class ShowDatabaseFragment: Fragment(), DatabaseOnListItemClickListener {
     /** Задание переменных */ //region
     // Binding
     private var _binding: FragmentDatabaseWordsBinding? = null
@@ -33,13 +36,28 @@ class ShowDatabaseFragment(
     private val databaseAdapter: DatabaseAdapter by lazy {
         DatabaseAdapter(this@ShowDatabaseFragment)
     }
+    // FragmentDatabaseRecyclerview
+    private val fragmentDatabaseRecyclerview by viewById<RecyclerView>(
+        R.id.fragment_database_recyclerview, getKoin().get())
     // ResourcesProviderImpl
     private val resourcesProviderImpl: ResourcesProviderImpl = getKoin().get()
+    // ShowDatabaseFragmentScope
+    lateinit var showDatabaseFragmentScope: Scope
+    // Счётчик отображений результатов запроса (для устранения дублирования запроса к абзе данных)
+    private var countShowResult: Int = 0
     //endregion
 
 
     companion object {
-        fun newInstance(word: String): ShowDatabaseFragment = ShowDatabaseFragment(word)
+        fun newInstance(): ShowDatabaseFragment = ShowDatabaseFragment()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // РАБОЧИЙ АЛГОРИТМ
+        showDatabaseFragmentScope = getKoin().getOrCreateScope(
+                Constants.SHOW_DATABASE_FRAGMENT_SCOPE,
+                named(Constants.SHOW_DATABASE_FRAGMENT_SCOPE))
     }
 
     override fun onCreateView(
@@ -52,6 +70,12 @@ class ShowDatabaseFragment(
         return binding.root
     }
 
+    override fun onDetach() {
+        // Удаление скоупа для данного фрагмента
+        showDatabaseFragmentScope.close()
+        super.onDetach()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -62,14 +86,14 @@ class ShowDatabaseFragment(
     }
 
     private fun initViewModel() {
-        if (binding.fragmentDatabaseRecyclerview.adapter != null) {
+        if (fragmentDatabaseRecyclerview.adapter != null) {
             throw IllegalStateException(
                 "${resourcesProviderImpl.getString(R.string.error_textview_stub)}: ${
                     resourcesProviderImpl.getString(R.string.viewmodel_error)}")
         }
-        val viewModel: ShowDatabaseViewModel by viewModel()
+        val viewModel: ShowDatabaseViewModel by showDatabaseFragmentScope.inject()
         model = viewModel
-        model.subscribe().observe(this@ShowDatabaseFragment,
+        model.subscribe().observe(viewLifecycleOwner,
             Observer<AppState> { renderData(it) })
     }
 
@@ -124,10 +148,8 @@ class ShowDatabaseFragment(
 
     private fun initViews() {
         // Настройка списка
-        binding.fragmentDatabaseRecyclerview.layoutManager = LinearLayoutManager(context)
-        binding.fragmentDatabaseRecyclerview.adapter = databaseAdapter
-        // Получение данных из базы данных
-        getData(word)
+        fragmentDatabaseRecyclerview.layoutManager = LinearLayoutManager(context)
+        fragmentDatabaseRecyclerview.adapter = databaseAdapter
     }
 
     // Очистка Binding при уничтожении фрагмента
@@ -146,8 +168,9 @@ class ShowDatabaseFragment(
         model.playSoundWord(soundUrl)
     }
 
-    // Получение данных из базы данных
-    fun getData(word: String) {
-        model.getData(word)
+    // Повторный запрос на получение данных после поворота экрана
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        model.getData()
+        super.onViewStateRestored(savedInstanceState)
     }
 }

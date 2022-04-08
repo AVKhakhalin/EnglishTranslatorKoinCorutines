@@ -2,7 +2,6 @@ import org.gradle.api.JavaVersion
 
 object Config {
     const val application_id = "ru.geekbrains.popular.libraries.less_1_homework"
-//    const val application_id = "ru.geekbrains.popular.libraries.englishtranslatorkoincorutines"
     const val compile_sdk = 31
     const val min_sdk = 21
     const val target_sdk = 31
@@ -26,7 +25,7 @@ object Versions {
     //AndroidX
     const val androidX = "1.3.1"
     //Kotlin
-    const val kotlinKTX = "1.3.2"
+    const val kotlinKTX = "1.6.0"
     const val kotlinJDK7 = "1.5.20"
     const val kotlinCoroutinescore = "1.5.1"
     const val kotlinCoroutineandroid = "1.5.0"

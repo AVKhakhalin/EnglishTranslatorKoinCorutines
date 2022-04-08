@@ -2,6 +2,7 @@ package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di
 
 import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.utils.themecolors.ThemeColorsImpl
@@ -10,6 +11,7 @@ import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.fragm
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainInteractor
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.main.MainViewModel
 import ru.geekbrains.popular.libraries.model.Constants
+import ru.geekbrains.popular.libraries.model.Settings.Settings
 import ru.geekbrains.popular.libraries.model.data.DataModel
 import ru.geekbrains.popular.libraries.model.datasource.RetrofitImplementation
 import ru.geekbrains.popular.libraries.model.datasource.RoomDataBaseImplementation
@@ -24,7 +26,8 @@ import ru.geekbrains.popular.libraries.utils.resources.ResourcesProviderImpl
 
 val application = module {
     // Локальная база данных
-    single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
+    single { Room.databaseBuilder(get(), HistoryDataBase::class.java,
+        Constants.NAME_DATABASE).build() }
     single { get<HistoryDataBase>().historyDao()}
     single<RepositoryLocal<List<DataModel>>>(named(Constants.NAME_LOCAL)) {
         RepositoryImplementationLocal(RoomDataBaseImplementation(get()))
@@ -42,20 +45,30 @@ val application = module {
     single<ThemeColorsImpl> { ThemeColorsImpl() }
     // Загрузка изображений с помощью библиотеки Glide
     single<GlideImageLoaderImpl> { GlideImageLoaderImpl() }
+    // Сохранение настроек приложения во ViewModel
+    single<Settings> { Settings() }
 }
 
 val mainScreen = module {
-    factory {
-        MainInteractor(
-            get(named(Constants.NAME_REMOTE)),
-            get(named(Constants.NAME_LOCAL)),
-            NetworkStatus(get())
+    scope(named(Constants.MAIN_ACTIVITY_SCOPE)) {
+        scoped {
+            MainInteractor(
+                get(named(Constants.NAME_REMOTE)),
+                get(named(Constants.NAME_LOCAL)),
+                NetworkStatus(get())
             )
+        }
+        viewModel {
+            MainViewModel(getScope(Constants.MAIN_ACTIVITY_SCOPE).get(), get())
+        }
     }
-    factory { MainViewModel(get()) }
 }
 
 val showDataBaseScreen = module {
-    factory { ShowDatabaseViewModel(get()) }
-    factory { ShowDatabaseInteractor(get(named(Constants.NAME_LOCAL)))}
+    scope(named(Constants.SHOW_DATABASE_FRAGMENT_SCOPE)) {
+        scoped { ShowDatabaseInteractor(get(named(Constants.NAME_LOCAL))) }
+        viewModel {
+            ShowDatabaseViewModel(getScope(Constants.SHOW_DATABASE_FRAGMENT_SCOPE).get(), get())
+        }
+    }
 }

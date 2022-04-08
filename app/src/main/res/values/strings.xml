@@ -5,7 +5,7 @@
     <string name="error_unknown_model_class">Неизвестный класс</string>
     <string name="reload_button">Загрузить</string>
     <string name="undefined_error">Неизвестная ошибка</string>
-    <string name="viewmodel_error">Вью модель должна быть инициализирована вначале</string>
+    <string name="viewmodel_error">Вью модель должна быть инициализирована в начале</string>
     <string name="empty_database_error">В базе данных нет данных</string>
     <string name="loading_dates_error">В процессе загрузки данных возникла ошибка</string>
     <string name="delete_word_info_begin">Слово</string>
