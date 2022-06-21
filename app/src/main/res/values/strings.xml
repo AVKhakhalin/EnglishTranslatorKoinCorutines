@@ -5,6 +5,16 @@
     <string name="error_unknown_model_class">Неизвестный класс</string>
     <string name="reload_button">Загрузить</string>
     <string name="undefined_error">Неизвестная ошибка</string>
+    <string name="viewmodel_error">Вью модель должна быть инициализирована вначале</string>
+    <string name="empty_database_error">В базе данных нет данных</string>
+    <string name="loading_dates_error">В процессе загрузки данных возникла ошибка</string>
+    <string name="empty_request_error">Для поиска в базе данных воспользуйтесь поисковым полем.\nВывести всю имеющуюся информацию можно по запросу \"*\"</string>
+    <string name="search_info_begin">В базе данных нет слова</string>
+    <string name="search_info_end">\nВывести всю имеющуюся информацию можно по запросу "*"</string>
+    <string name="delete_word_info_begin">Слово</string>
+    <string name="delete_word_info_end">удалено</string>
+    <string name="save_word_info_begin">Слово</string>
+    <string name="save_word_info_end">сохранено</string>
     <string name="empty_server_response_on_success">Неизвестное слово</string>
     <string name="button_search">Поиск</string>
     <string name="search_hint">Новое слово</string>
@@ -12,5 +22,10 @@
     <string name="header_textview_recycler_item_tools_text">Заголовок</string>
     <string name="description_textview_recycler_item_tools_text">Образец текста</string>
     <string name="search_default_help">Введите слово</string>
-    <string name="action_bottom_change_theme">Сменить тему</string>
+    <string name="action_bottom_change_theme_title">Сменить тему</string>
+    <string name="action_show_db_title">Посмотреть сохранённое</string>
+    <string name="database_buttons_relative_layout_hints">Удалить слово</string>
+    <string name="main_save_to_db_hints">Сохранить</string>
+    <string name="get_permission_write_read_text">Разрешение на запись и считывание данных получено</string>
+    <string name="not_get_permission_write_read_text">Разрешение на запись и считывание данных отсутствует</string>
 </resources>

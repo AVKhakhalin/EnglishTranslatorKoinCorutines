@@ -23,7 +23,7 @@
         <item name="colorSurface">@color/activity_background_day</item>
         <!--Цвет верхней линии на экране-->
         <item name="colorPrimaryVariant">@color/color_primary_dark_day</item>
-        <item name="colorOnPrimary">@color/white_day</item>
+        <item name="colorOnPrimary">#FDEBB4</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#FDEBB4</item>
         <item name="colorSecondaryVariant">@color/color_accent_day</item>

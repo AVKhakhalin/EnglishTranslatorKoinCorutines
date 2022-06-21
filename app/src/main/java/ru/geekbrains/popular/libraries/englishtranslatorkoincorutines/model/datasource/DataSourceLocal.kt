@@ -1,11 +1,10 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.datasource
 
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.DataModel
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.model.data.AppState
 
-class DataSourceLocal(
-    private val remoteProvider:
-    RoomDataBaseImplementation = RoomDataBaseImplementation()
-): DataSource<List<DataModel>> {
+interface DataSourceLocal<T>: DataSource<T> {
 
-    override suspend fun getData(word: String): List<DataModel> = remoteProvider.getData(word)
+    suspend fun saveToDB(appState: AppState)
+
+    suspend fun deleteFromDB(word: String)
 }

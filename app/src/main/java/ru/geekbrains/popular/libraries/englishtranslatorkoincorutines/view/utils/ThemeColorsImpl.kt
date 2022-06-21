@@ -11,13 +11,15 @@ class ThemeColorsImpl: ThemeColors {
     private val colorSecondaryVariantTypedValue: TypedValue = TypedValue()
     private val colorPrimaryVariantTypedValue: TypedValue = TypedValue()
     private val colorPrimaryTypedValue: TypedValue = TypedValue()
+    private val colorSurfaceTypedValue: TypedValue = TypedValue()
     //endregion
 
     override fun initiateColors(resourcesTheme: Resources.Theme) {
         resourcesTheme.resolveAttribute(
             R.attr.colorSecondary, colorSecondaryTypedValue, true
         )
-        resourcesTheme.resolveAttribute(R.attr.color, colorTypedValue, true)
+        resourcesTheme.resolveAttribute(
+            R.attr.color, colorTypedValue, true)
         resourcesTheme.resolveAttribute(
             R.attr.colorSecondaryVariant, colorSecondaryVariantTypedValue, true
         )
@@ -27,27 +29,29 @@ class ThemeColorsImpl: ThemeColors {
         resourcesTheme.resolveAttribute(
             R.attr.colorPrimary, colorPrimaryTypedValue, true
         )
+        resourcesTheme.resolveAttribute(
+            R.attr.colorSurface, colorSurfaceTypedValue, true
+        )
     }
 
     //region МЕТОДЫ ПОЛУЧЕНИЯ ЦВЕТОВ ИЗ АТТРИБУТОВ ТЕМЫ
     fun getColorSecondaryTypedValue(): Int {
         return colorSecondaryTypedValue.data
     }
-
     fun getColorTypedValue(): Int {
         return colorTypedValue.data
     }
-
     fun getSecondaryVariantTypedValue(): Int {
         return colorSecondaryVariantTypedValue.data
     }
-
     fun getColorPrimaryVariantTypedValue(): Int {
         return colorPrimaryVariantTypedValue.data
     }
-
     fun getColorPrimaryTypedValue(): Int {
         return colorPrimaryTypedValue.data
+    }
+    fun getColorSurfaceTypedValue(): Int {
+        return colorSurfaceTypedValue.data
     }
     //endregion
 }

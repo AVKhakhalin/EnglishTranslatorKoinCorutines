@@ -4,15 +4,24 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- Разрешения на запись информации на диск телефона -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Разрешения на запись информации на диск телефона -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+    <!-- This attribute is "false" by default on apps targeting Android Q. -->
+    <!-- Включена поддержка больших файлов (largeHeap) -->
     <application
+        android:requestLegacyExternalStorage="true"
+        android:largeHeap="true"
+
+        android:name=".application.TranslatorApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/DayTheme"
-        android:name=".application.TranslatorApp">
+        android:theme="@style/DayTheme">
         <activity
             android:name=".view.main.MainActivity"
             android:theme="@style/SplashTheme"

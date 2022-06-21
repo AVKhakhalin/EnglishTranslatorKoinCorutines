@@ -1,12 +1,11 @@
 package ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.application
 
 import android.app.Application
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di.application
 import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di.mainScreen
-import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.view.utils.ThemeColorsImpl
+import ru.geekbrains.popular.libraries.englishtranslatorkoincorutines.di.showDataBaseScreen
 
 class TranslatorApp: Application() {
     /** Задание переменных */ //region
@@ -23,7 +22,7 @@ class TranslatorApp: Application() {
         // Koin
         startKoin {
             androidContext(applicationContext)
-            modules(listOf(application, mainScreen))
+            modules(listOf(application, mainScreen, showDataBaseScreen))
         }
     }
 }

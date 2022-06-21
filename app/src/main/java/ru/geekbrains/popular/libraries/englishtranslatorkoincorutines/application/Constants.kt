@@ -7,9 +7,14 @@ class Constants {
         const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
         const val SHARED_PREFERENCES_THEME_KEY: String = "Shared Preferences Is Theme Day"
         const val SHARED_PREFERENCES_MAIN_STATE_KEY: String = "Shared Preferences Is Main State"
-        const val BUTTON_CHANGE_THEME_INDEX: Int = 0
+        const val SHARED_PREFERENCES_DATABASE_SCREEN: String = "Shared Preferences Is Database Show"
+        const val BUTTON_LOAD_FROM_DB_INDEX: Int = 0
+        const val BUTTON_CHANGE_THEME_INDEX: Int = 1
         const val ENGLISH_SYMBOLS = "[a-zA-Z]"
         const val BASE_URL_LOCATIONS = "https://dictionary.skyeng.ru/api/public/v1/"
+        const val HTTPS_BASE = "https:"
+        const val CACHE_FOLDER_NAME = "/Pictograms/"
+        const val CACHE_FILE_EXTENSION = ".jpg"
 
         // Dagger
         const val NAME_REMOTE = "Remote"
